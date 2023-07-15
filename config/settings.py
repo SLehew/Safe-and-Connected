@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+
+from pathlib import Path
 import environ
 import os
-from pathlib import Path
 
 env = environ.Env(
     # set casting, default value
@@ -19,6 +20,8 @@ env = environ.Env(
     USE_S3=(bool, False),
     RENDER=(bool, False)
 )
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,12 +37,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@@if_bo78(%mh!3*nti=pdp9v35+a$2*t($rd*3jwn^$mf5-yr'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+if env("RENDER"):
+    ALLOWED_HOSTS.append(env("RENDER_EXTERNAL_HOSTNAME"))
+    DJANGO_SUPERUSER_USERNAME=env("DJANGO_SUPERUSER_USERNAME") 
+    DJANGO_SUPERUSER_PASSWORD=env("DJANGO_SUPERUSER_PASSWORD") 
+    DJANGO_SUPERUSER_EMAIL=env("DJANGO_SUPERUSER_EMAIL") 
 
 
 # Application definition
@@ -50,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
     'rest_framework',
     'safe_connected',
@@ -57,6 +67,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -90,14 +101,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'safe_connected',
-        'USER': 'safe_connected',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
+		default: env.db()
+	}
 
 
 # Password validation
@@ -135,6 +140,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+if not DEBUG: 
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
