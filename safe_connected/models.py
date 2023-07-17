@@ -1,15 +1,39 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from phonenumber_field.modelfields import PhoneNumberField
 
 
-class User_Lang(models.Model):
-    user_lang = models.CharField(max_length=100)
+class User(AbstractUser):
+
+    CLIENT = "Client"
+    MANAGER = "Manager"
+
+    ROLE_CHOICES = [
+        (CLIENT, "Client"),
+        (MANAGER, "Manager"),
+    ]
+
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
     def __str__(self):
-        return self.user_lang
+        return self.username
 
 
-class Organization(models.Model):
+class Lang(models.Model):
+    lang = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.lang
+
+
+class ClientProfile(models.Model):
+    client_zipcode = models.IntegerField(default=27514)
+    client_children = models.BooleanField(default=False)
+    client_notes = models.TextField(blank=True)
+    client_phone = PhoneNumberField(blank=True)
+
+
+class OrganizationProfile(models.Model):
     org_name = models.CharField(max_length=250)
     street_number = models.CharField(max_length=50, blank=True, null=True)
     street_name = models.CharField(max_length=250, blank=True, null=True)
@@ -19,27 +43,24 @@ class Organization(models.Model):
     phone = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return self.org_name 
+        return self.org_name
 
 
-
-class User(AbstractUser):
-
-    CLIENT = "Client"
-    MANAGER = "Manager"
-    ROLE_CHOICES = [
-        (CLIENT, "Client"),
-        (MANAGER, "Manager"),
-    ]
-
-    user_lang = models.ForeignKey(
-        to=User_Lang, on_delete=models.CASCADE, blank=True, null=True)
-    client_zipcode = models.IntegerField(default=27514)
-    client_children = models.BooleanField(default=False)
-    notes = models.TextField()
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+class OrganizationMembership(models.Model):
+    client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
     organization = models.ForeignKey(
-        to=Organization, on_delete=models.CASCADE, blank=True, null=True)
+        to=OrganizationProfile, on_delete=models.CASCADE)
 
-    def __str(self):
-        return self.username
+    def __str__(self):
+        return self.client
+
+
+class ClientLanguageMembership(models.Model):
+    client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
+    client_language = models.ForeignKey(to=Lang, on_delete=models.CASCADE)
+
+
+class OrgLanguageMembership(models.Model):
+    organization = models.ForeignKey(
+        to=OrganizationProfile, on_delete=models.CASCADE)
+    org_language = models.ForeignKey(to=Lang, on_delete=models.CASCADE)
