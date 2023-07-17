@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'safe_connected',
     'storages',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,8 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 AWS_LOCATION = 'static'
+AWS_REGION = 'us-east-2'
+os.environ['AWS_DEFAULT_REGION'] = AWS_REGION
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
