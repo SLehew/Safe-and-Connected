@@ -81,7 +81,3 @@ class EventSearchViewSet(APIView):
 
         serializer = EventSerializer(results, many=True)
         return Response(serializer.data)
-
-
-
-        
