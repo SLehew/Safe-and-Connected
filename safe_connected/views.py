@@ -1,8 +1,8 @@
 from rest_framework import generics, permissions, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import EventSerializer
-from .models import User, Event
+from .serializers import EventSerializer, EventRosterSerializer
+from .models import User, Event, EventRoster
 
 
 class EventViewSet(generics.CreateAPIView):
@@ -13,6 +13,16 @@ class EventViewSet(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)
+
+
+class EventRosterCreateViewSet(generics.CreateAPIView):
+    queryset = EventRoster.objects.all()
+    serializer_class = EventRosterSerializer
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(client_attendee=self.request.user)
 
 
 class EventListViewSet(generics.ListCreateAPIView):
@@ -33,6 +43,23 @@ class EventListViewSet(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)
+
+
+class EventRosterViewSet(generics.RetrieveUpdateDestroyAPIView):
+    queryset = EventRoster.objects.all()
+    serializer_class = EventRosterSerializer
+    search_fields = [
+        "event_id",
+        "client_attendee",
+    ]
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        return self.queryset.filter(client_attendee=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(client_attendee=self.request.user)
 
 
 class EventSearchViewSet(APIView):
