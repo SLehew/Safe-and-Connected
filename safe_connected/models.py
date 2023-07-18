@@ -27,10 +27,13 @@ class Lang(models.Model):
 
 
 class ClientProfile(models.Model):
+
     client_zipcode = models.IntegerField(default=27514)
     client_children = models.BooleanField(default=False)
     client_notes = models.TextField(blank=True)
     client_phone = PhoneNumberField(blank=True)
+    client = models.ForeignKey(
+        to=User, on_delete=models.CASCADE, default=1)
 
 
 class OrganizationProfile(models.Model):
