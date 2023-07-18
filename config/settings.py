@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'storages',
     'phonenumber_field',
+    'address',
 ]
 
 MIDDLEWARE = [
@@ -169,3 +170,5 @@ AUTH_USER_MODEL = 'safe_connected.User'
 CORS_ALLOW_ALL_ORIGINS = True
 
 MEDIA_URL = "/media/"
+
+GOOGLE_API_KEY = env('GOOGLE_API_KEY')

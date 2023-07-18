@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
+from address.models import AddressField
 
 
 class User(AbstractUser):
@@ -67,3 +68,29 @@ class OrgLanguageMembership(models.Model):
     organization = models.ForeignKey(
         to=OrganizationProfile, on_delete=models.CASCADE)
     org_language = models.ForeignKey(to=Lang, on_delete=models.CASCADE)
+
+
+class EventType(models.Model):
+    event_type = models.CharField(max_length=50)
+
+
+class Event(models.Model):
+
+    event_organizer = models.ForeignKey(
+        to=User, on_delete=models.CASCADE)
+    event_organization = models.ForeignKey(
+        to=OrganizationProfile, on_delete=models.CASCADE)
+    event_language = models.ForeignKey(
+        to=Lang, on_delete=models.CASCADE, default=0)
+    event_title = models.CharField(max_length=250)
+    event_type = models.ForeignKey(
+        to=EventType, on_delete=models.CASCADE, default=0)
+    general_notes = models.TextField()
+    location = AddressField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    privacy = models.BooleanField(default=False)
+    max_attendees = models.IntegerField(blank=True, null=True)
+
+    def __str__():
+        return self.event_title

@@ -19,6 +19,7 @@ django-phonenumber-field = "*"
 django-phonenumbers = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
+django-address = "*"
 
 [dev-packages]
 
