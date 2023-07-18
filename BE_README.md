@@ -25,7 +25,7 @@ https://safe-connected.onrender.com/
 
 #### Create Token
 
-```https://questionapi.onrender.com
+```https://safe-connected.onrender.com/
   POST /auth/users/
 ```
 
@@ -39,3 +39,13 @@ https://safe-connected.onrender.com/
 ```https://safe-connected.onrender.com/
   POST /auth/token/logout/
 ```
+#### Create Event
+
+```https://safe-connected.onrender.com/
+  POST /auth/users/
+```
+
+| Parameter      | Type     | Description                       |
+| :--------      | :------- | :-------------------------------- |
+|`event_title`   |`str`     |                                   |
+| `general_notes`| `str`    |                                   |
