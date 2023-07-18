@@ -12,3 +12,4 @@ class EventViewSet(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)
+        

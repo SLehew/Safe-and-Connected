@@ -73,6 +73,9 @@ class OrgLanguageMembership(models.Model):
 class EventType(models.Model):
     event_type = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.event_type
+
 
 class Event(models.Model):
 
