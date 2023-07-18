@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import User, Event, EventRoster
+from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile
+from .models import OrganizationMembership, ClientLanguageMembership
+from .models import OrgLanguageMembership, EventType
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -13,4 +15,53 @@ class EventRosterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EventRoster
+        fields = '__all__'
+
+
+class LangSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Lang
+        fields = '__all__'
+
+
+class ClientProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ClientProfile
+        fields = '__all__'
+
+
+class OrganizationProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrganizationProfile
+        fields = '__all__'
+
+
+class OrganizationMembershipSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrganizationMembership
+        fields = '__all__'
+
+
+class ClientLanguageMembershipSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ClientLanguageMembership
+        fields = '__all__'
+
+
+class OrgLanguageMembershipSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OrgLanguageMembership
+        fields = '__all__'
+
+
+class EventTypeSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = EventType
         fields = '__all__'
