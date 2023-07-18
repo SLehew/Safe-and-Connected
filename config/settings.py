@@ -58,7 +58,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'djoser',
     'safe_connected',
+    'rest_framework.authtoken',
     'storages',
     'phonenumber_field',
 ]
