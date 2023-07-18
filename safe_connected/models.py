@@ -101,3 +101,11 @@ class Event(models.Model):
 
     def __str__(self):
         return self.event_title
+
+
+class EventRoster(models.Model):
+    event_id = models.ForeignKey(to=Event, on_delete=models.CASCADE)
+    client_attendee = models.ForeignKey(to=User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.event_id
