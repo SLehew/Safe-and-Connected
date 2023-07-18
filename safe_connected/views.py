@@ -8,7 +8,7 @@ class EventViewSet(generics.CreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(event_orgranizer=self.request.user)
+        serializer.save(event_organizer=self.request.user)

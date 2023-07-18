@@ -81,16 +81,20 @@ class Event(models.Model):
     event_organization = models.ForeignKey(
         to=OrganizationProfile, on_delete=models.CASCADE)
     event_language = models.ForeignKey(
-        to=Lang, on_delete=models.CASCADE, default=0)
+        to=Lang, on_delete=models.CASCADE, default=1)
     event_title = models.CharField(max_length=250)
     event_type = models.ForeignKey(
-        to=EventType, on_delete=models.CASCADE, default=0)
+        to=EventType, on_delete=models.CASCADE, default=1)
     general_notes = models.TextField()
-    location = AddressField()
+    street_number = models.CharField(max_length=50, blank=True, null=True)
+    street_name = models.CharField(max_length=250, blank=True, null=True)
+    city = models.CharField(max_length=250, blank=True, null=True)
+    state = models.CharField(max_length=2, blank=True, null=True)
+    zipcode = models.CharField(max_length=25, default='27514')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     privacy = models.BooleanField(default=False)
     max_attendees = models.IntegerField(blank=True, null=True)
 
-    def __str__():
+    def __str__(self):
         return self.event_title
