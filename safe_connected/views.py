@@ -114,7 +114,7 @@ class ClientProfileDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
         serializer.save(client=self.request.user)
 
 
-class OrganizationProfileViewSet(generics.CreateAPIView):
+class OrganizationProfileViewSet(generics.ListCreateAPIView):
     queryset = OrganizationProfile.objects.all()
     serializer_class = OrganizationProfileSerializer
 
