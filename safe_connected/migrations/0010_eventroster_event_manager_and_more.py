@@ -15,18 +15,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='eventroster',
             name='event_manager',
-            field=models.ForeignKey(default=6, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='eventroster',
             name='event_organization',
+<<<<<<< HEAD
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='safe_connected.organizationprofile'),
+=======
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='safe_connected.organizationprofile'),
+>>>>>>> main
             preserve_default=False,
         ),
         migrations.AlterField(
             model_name='eventroster',
             name='client_attendee',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='safe_connected.clientprofile'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='safe_connected.clientprofile'),
         ),
     ]

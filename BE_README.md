@@ -26,7 +26,7 @@ https://safe-connected.onrender.com/
 #### Create Token
 
 ```https://safe-connected.onrender.com/
-  POST /auth/users/
+  POST /auth/token/login
 ```
 
 | Parameter | Type     | Description                       |
@@ -42,10 +42,94 @@ https://safe-connected.onrender.com/
 #### Create Event
 
 ```https://safe-connected.onrender.com/
-  POST /auth/users/
+  POST /event/create/
 ```
 
 | Parameter      | Type     | Description                       |
 | :--------      | :------- | :-------------------------------- |
 |`event_title`   |`str`     |                                   |
 | `general_notes`| `str`    |                                   |
+
+### List Event
+
+```https://safe-connected.onrender.com/
+  GET /event/list/
+```
+### Search Event
+
+```https://safe-connected.onrender.com/
+  GET /event/search/
+```
+
+### Create Event Roster
+
+```https://safe-connected.onrender.com/
+  POST /event/roster/create/
+```
+
+| Parameter        | Type     | Description                       |
+| :--------        | :------- | :-------------------------------- |
+|`event_id`           |`str`  |                                   |
+| `client_attendee`   | `str` |                                   |
+|`event_manager`      |`str`  |                                   |
+| `event_organization`|`str`  |                                   |
+
+
+### Get event roster details
+```https://safe-connected.onrender.com/
+  GET /event/roster/<int:pk>/
+```
+
+### Update event roster details
+```https://safe-connected.onrender.com/
+  PATCH /event/roster/<int:pk>/
+```
+
+### Delete event roster
+```https://safe-connected.onrender.com/
+  DELETE /event/roster/<int:pk>/
+```
+
+### Create Organization profile
+
+```https://safe-connected.onrender.com/
+  POST /organization/create/
+```
+
+| Parameter        | Type     | Description                       |
+| :--------        | :------- | :-------------------------------- |
+|`org_name`           |`str`  |                                   |
+
+### Get Organization list
+
+```https://safe-connected.onrender.com/
+  GET /organization/
+```
+
+### Get Organization DETAILS
+
+```https://safe-connected.onrender.com/
+  GET /organization/<int:pk>/
+```
+
+### Update Organization DETAILS
+
+```https://safe-connected.onrender.com/
+  PATCH /organization/<int:pk>/
+```
+
+### Delete Organization 
+
+```https://safe-connected.onrender.com/
+  DELETE /organization/<int:pk>/
+```
+
+### Add language 
+
+```https://safe-connected.onrender.com/
+  POST language/add/
+```
+
+| Parameter        | Type     | Description                       |
+| :--------        | :------- | :-------------------------------- |
+|`lang`            |`str`     |                                   |
