@@ -84,7 +84,7 @@ class EventRosterViewSet(generics.RetrieveUpdateDestroyAPIView):
         return self.queryset.filter(client_attendee=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(client_attendee=self.request.user)
+        serializer.save()
 
 
 class LanguageViewSet(generics.CreateAPIView):
