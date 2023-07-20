@@ -78,9 +78,3 @@ class FileUploadSerializer(serializers.ModelSerializer):
             "file",
         ]
 
-    def validate(self, data):
-        if data["client_profile"] and data["organization_profile"]:
-            raise serializers.ValidationError(
-                "Only one id allowed for client_profile or organization_profile"
-            )
-        return data

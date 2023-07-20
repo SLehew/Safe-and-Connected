@@ -133,3 +133,7 @@ class FileUpload(models.Model):
     event = models.ForeignKey(
         to=Event, on_delete=models.CASCADE, blank=True, null=True)
     file = models.FileField(upload_to="uploads/")
+    file_desc = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.file_desc
