@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile
 from .models import OrganizationMembership, ClientLanguageMembership
-from .models import OrgLanguageMembership, EventType
+from .models import OrgLanguageMembership, EventType, FileUpload
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -65,3 +65,16 @@ class EventTypeSerializers(serializers.ModelSerializer):
     class Meta:
         model = EventType
         fields = '__all__'
+
+
+class FileUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FileUpload
+        fields = [
+            "id",
+            "client_profile",
+            "organization_profile",
+            "event",
+            "file",
+        ]
+
