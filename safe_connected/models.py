@@ -37,6 +37,9 @@ class ClientProfile(models.Model):
     client = models.ForeignKey(
         to=User, on_delete=models.CASCADE, default=1)
 
+    def __str__(self):
+        return self.client.username
+
 
 class OrganizationProfile(models.Model):
     org_name = models.CharField(max_length=250)
@@ -58,18 +61,24 @@ class OrganizationMembership(models.Model):
         to=OrganizationProfile, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.client
+        return f"{self.organization.org_name} {self.client}"
 
 
 class ClientLanguageMembership(models.Model):
     client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
     client_language = models.ForeignKey(to=Lang, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.client} {self.client_language}"
+
 
 class OrgLanguageMembership(models.Model):
     organization = models.ForeignKey(
         to=OrganizationProfile, on_delete=models.CASCADE)
     org_language = models.ForeignKey(to=Lang, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.organization.org_name} {self.org_language}"
 
 
 class EventType(models.Model):
@@ -82,9 +91,9 @@ class EventType(models.Model):
 class Event(models.Model):
 
     event_organizer = models.ForeignKey(
-        to=User, on_delete=models.CASCADE)
+        to=User, on_delete=models.CASCADE, blank=True)
     event_organization = models.ForeignKey(
-        to=OrganizationProfile, on_delete=models.CASCADE)
+        to=OrganizationProfile, on_delete=models.CASCADE, blank=True)
     event_language = models.ForeignKey(
         to=Lang, on_delete=models.CASCADE, default=1)
     event_title = models.CharField(max_length=250)
@@ -113,4 +122,4 @@ class EventRoster(models.Model):
         to=OrganizationProfile, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.event_id
+        return f"{self.event_id} {self.client_attendee}"

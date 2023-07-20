@@ -93,6 +93,9 @@ class LanguageViewSet(generics.CreateAPIView):
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def perform_create(self, serializer):
+        serializer.save()
+
 
 class ClientProfileViewSet(generics.CreateAPIView):
     queryset = ClientProfile.objects.all()
@@ -134,12 +137,18 @@ class OrganizationMembershipViewSet(generics.CreateAPIView):
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def perform_create(self, serializer):
+        serializer.save()
+
 
 class ClientLanguageMembershipViewSet(generics.CreateAPIView):
     queryset = ClientLanguageMembership.objects.all()
     serializer_class = ClientLanguageMembershipSerializer
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 class OrgLanguageMembershipViewSet(generics.CreateAPIView):
