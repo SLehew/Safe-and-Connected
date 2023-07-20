@@ -111,17 +111,22 @@ class Event(models.Model):
     privacy = models.BooleanField(default=False)
     max_attendees = models.IntegerField(blank=True, null=True)
 
-    def __str__(self):
-        return self.event_title
-
     def email_event_create(self):
+
+        email_to = self.event_organizer.email
 
         send_mail(
             subject=(f'{self.event_title} on {self.start_time}'),
             message=(
                 f'{self.event_organizer}, you have successfully created an event titled {self.event_title}. It is scheduled for {self.start_time}.'),
             from_email=settings.EMAIL_HOST_USER,
+            recipient_list=email_to,
+            fail_silently=False
+
         )
+
+    def __str__(self):
+        return self.event_title
 
 
 class EventRoster(models.Model):
