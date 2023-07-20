@@ -39,5 +39,7 @@ urlpatterns = [
     # POST
     path("org/client/mem/create/", views.OrganizationMembershipViewSet.as_view(),
          name="create-organiz-client-membership"),
+    # POST
+    path("uploads/", views.UploadCreateView.as_view()),
 
 ]
