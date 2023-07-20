@@ -7,7 +7,7 @@ from .serializers import ClientProfileSerializer, OrganizationProfileSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
-from .models import ClientLanguageMembership, OrgLanguageMembership, EventType
+from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload
 from safe_connected.permissions import IsManagerOrReadOnly
 
 
