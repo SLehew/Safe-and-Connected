@@ -123,3 +123,13 @@ class EventRoster(models.Model):
 
     def __str__(self):
         return f"{self.event_id} {self.client_attendee}"
+
+
+class FileUpload(models.Model):
+    client_profile = models.ForeignKey(
+        to=ClientProfile, on_delete=models.CASCADE, blank=True, null=True)
+    organization_profile = models.ForeignKey(
+        to=OrganizationProfile, on_delete=models.CASCADE, blank=True, null=True)
+    event = models.ForeignKey(
+        to=Event, on_delete=models.CASCADE, blank=True, null=True)
+    file = models.FileField(upload_to="uploads/")

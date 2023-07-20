@@ -4,9 +4,9 @@ from rest_framework.views import APIView
 from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer
-from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers
+from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
-from .models import ClientLanguageMembership, OrgLanguageMembership, EventType
+from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload
 
 
 class EventViewSet(generics.CreateAPIView):
@@ -163,3 +163,9 @@ class EventTypeViewSet(generics.CreateAPIView):
     serializer_class = EventTypeSerializers
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class UploadCreateView(generics.CreateAPIView):
+    queryset = FileUpload.objects.all()
+    serializer_class = FileUploadSerializer
+    permission_classes = [permissions.IsAuthenticated]
