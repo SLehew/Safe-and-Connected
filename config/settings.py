@@ -181,3 +181,11 @@ REST_FRAMEWORK = {
 
 
 }
+
+DJOSER = {
+
+    'SERIALIZERS': {
+        'user_create': 'safe_connected.serializers.UserRegistrationSerializer'
+    }
+
+}
