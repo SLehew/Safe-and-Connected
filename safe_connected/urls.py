@@ -9,6 +9,12 @@ urlpatterns = [
     # GET
     path("event/list/", views.EventListViewSet.as_view(), name="list-event"),
     # GET
+    path("Client/event/list/", views.EventHomeClientViewSet.as_view(),
+         name="client-list-event"),
+    # GET|UPDATE|DELETE
+    path("event/details/<int:pk>/",
+         views.EventDetailViewSet.as_view(), name="event-detail"),
+    # GET
     path("event/search/", views.EventSearchViewSet.as_view(), name="event-search"),
     # GET|UPDATE|DESTROY
     path("event/roster/<int:pk>",

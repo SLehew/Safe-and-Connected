@@ -176,5 +176,7 @@ GOOGLE_API_KEY = env('GOOGLE_API_KEY')
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
-    )
+    ),
+
+
 }
