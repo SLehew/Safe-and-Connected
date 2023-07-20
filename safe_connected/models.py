@@ -116,13 +116,10 @@ class Event(models.Model):
 
 class EventRoster(models.Model):
     event_id = models.ForeignKey(to=Event, on_delete=models.CASCADE)
-    client_attendee = models.ForeignKey(
-        to=User, on_delete=models.CASCADE, blank=True)
-    event_organization = models.ForeignKey(
-        to=OrganizationProfile, on_delete=models.CASCADE)
+    attendee = models.ManyToManyField(to=User)
 
     def __str__(self):
-        return f"{self.event_id} {self.client_attendee}"
+        return f"{self.event_id} {self.attendee}"
 
 
 class FileUpload(models.Model):
