@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
-from address.models import AddressField
+from django.core.mail import send_mail
+from config import settings
 
 
 class User(AbstractUser):
@@ -112,6 +113,15 @@ class Event(models.Model):
 
     def __str__(self):
         return self.event_title
+
+    def email_event_create(self):
+
+        send_mail(
+            subject=(f'{self.event_title} on {self.start_time}'),
+            message=(
+                f'{self.event_organizer}, you have successfully created an event titled {self.event_title}. It is scheduled for {self.start_time}.'),
+            from_email=settings.EMAIL_HOST_USER,
+        )
 
 
 class EventRoster(models.Model):
