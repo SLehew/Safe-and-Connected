@@ -20,6 +20,8 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+# Lang model is a table of all the languages used by organizations and clients
+
 
 class Lang(models.Model):
     lang = models.CharField(max_length=100)
@@ -54,6 +56,8 @@ class OrganizationProfile(models.Model):
     def __str__(self):
         return self.org_name
 
+# Identifies which organizations a client is affiliated with.
+
 
 class OrganizationMembership(models.Model):
     client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
@@ -63,6 +67,8 @@ class OrganizationMembership(models.Model):
     def __str__(self):
         return f"{self.organization.org_name} {self.client}"
 
+# Identifies which languages a client speaks.
+
 
 class ClientLanguageMembership(models.Model):
     client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
@@ -70,6 +76,8 @@ class ClientLanguageMembership(models.Model):
 
     def __str__(self):
         return f"{self.client} {self.client_language}"
+
+# Identifies which languages an organizations services.
 
 
 class OrgLanguageMembership(models.Model):

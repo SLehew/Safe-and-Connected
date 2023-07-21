@@ -10,6 +10,8 @@ from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload
 from safe_connected.permissions import IsManagerOrReadOnly
 
+# Create an event
+
 
 class EventViewSet(generics.CreateAPIView):
     queryset = Event.objects.all()
@@ -20,6 +22,8 @@ class EventViewSet(generics.CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)
 
+# lists all of a clients events
+
 
 class EventHomeClientViewSet(generics.ListAPIView):
     queryset = Event.objects.all()
@@ -27,6 +31,8 @@ class EventHomeClientViewSet(generics.ListAPIView):
 
     permission_classes = [
         permissions.IsAuthenticated]
+
+# List events by organizer, organization, language, or event type.
 
 
 class EventListViewSet(generics.ListCreateAPIView):
@@ -38,7 +44,6 @@ class EventListViewSet(generics.ListCreateAPIView):
         "event_organization",
         "event_language",
         "event_type",
-        "event_title",
     ]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
