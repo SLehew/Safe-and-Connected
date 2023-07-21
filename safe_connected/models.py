@@ -68,6 +68,15 @@ class OrganizationMembership(models.Model):
     def __str__(self):
         return f"{self.organization.org_name} {self.client}"
 
+
+class ManagerOrgMembership(models.Model):
+    manager = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    organization = models.ForeignKey(
+        to=OrganizationProfile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.organization.org_name
+
 # Identifies which languages a client speaks.
 
 
