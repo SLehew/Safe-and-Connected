@@ -202,10 +202,10 @@ class MembershipView(generics.ListAPIView):
     serializer_class = MembershipSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = [
-        "client"
+        "member"
     ]
 
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return self.queryset.filter(client=self.request.user)
+        return self.queryset.filter(member=self.request.user)
