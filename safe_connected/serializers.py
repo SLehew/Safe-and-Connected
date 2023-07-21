@@ -87,3 +87,9 @@ class FileUploadSerializer(serializers.ModelSerializer):
             "event",
             "file",
         ]
+
+
+class MembershipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrganizationMembership
+        fields = '__all__'

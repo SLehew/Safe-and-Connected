@@ -43,5 +43,7 @@ urlpatterns = [
          name="create-organiz-client-membership"),
     # POST
     path("uploads/", views.UploadCreateView.as_view()),
-
+    # GET
+    path("org/mem/",
+         views.MembershipView.as_view(), name="my-memberships"),
 ]

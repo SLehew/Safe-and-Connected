@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
-from .serializers import ClientProfileSerializer, OrganizationProfileSerializer
+from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
@@ -195,3 +195,17 @@ class UploadCreateView(generics.CreateAPIView):
     queryset = FileUpload.objects.all()
     serializer_class = FileUploadSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class MembershipView(generics.ListAPIView):
+    queryset = OrganizationMembership.objects.all()
+    serializer_class = MembershipSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        "client"
+    ]
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(client=self.request.user)
