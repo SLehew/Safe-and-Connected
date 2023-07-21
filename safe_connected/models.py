@@ -119,6 +119,8 @@ class Event(models.Model):
     privacy = models.BooleanField(default=False)
     max_attendees = models.IntegerField(blank=True, null=True)
 
+    # TODO: CURRENTLY NOT WORKING
+
     def email_event_create(self):
 
         email_to = self.event_organizer.email
