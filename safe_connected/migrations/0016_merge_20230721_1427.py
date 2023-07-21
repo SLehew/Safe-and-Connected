@@ -6,8 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('safe_connected', '0014_alter_user_role'),
-        ('safe_connected', '0015_remove_eventroster_client_attendee_and_more'),
+        ('safe_connected', '0015_alter_user_role'),
+        ('safe_connected', '0014_remove_eventroster_client_attendee_and_more'),
     ]
 
     operations = [
