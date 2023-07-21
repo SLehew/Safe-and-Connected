@@ -157,7 +157,7 @@ class EditOrganizationProfileViewSet(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class OrganizationMembershipViewSet(generics.CreateAPIView):
+class OrganizationMembershipViewSet(generics.ListCreateAPIView):
     queryset = OrganizationMembership.objects.all()
     serializer_class = OrganizationMembershipSerializer
 
