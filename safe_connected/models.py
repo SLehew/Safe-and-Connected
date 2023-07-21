@@ -61,7 +61,7 @@ class OrganizationProfile(models.Model):
 
 
 class OrganizationMembership(models.Model):
-    client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
+    client = models.ForeignKey(to=User, on_delete=models.CASCADE)
     organization = models.ForeignKey(
         to=OrganizationProfile, on_delete=models.CASCADE)
 
