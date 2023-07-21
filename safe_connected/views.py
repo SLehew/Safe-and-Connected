@@ -8,7 +8,7 @@ from .serializers import OrganizationMembershipSerializer, ClientLanguageMembers
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload
-from safe_connected.permissions import IsManagerOrReadOnly
+from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails
 
 # Create an event
 
@@ -58,7 +58,8 @@ class EventDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated,
+                          IsManagerOrReadOnlyEventDetails]
 
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)
