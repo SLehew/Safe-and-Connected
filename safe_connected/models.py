@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
-from address.models import AddressField
+from django.core.mail import send_mail
+from config import settings
 
 
 class User(AbstractUser):
@@ -19,6 +20,8 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+# Lang model is a table of all the languages used by organizations and clients
 
 
 class Lang(models.Model):
@@ -54,6 +57,8 @@ class OrganizationProfile(models.Model):
     def __str__(self):
         return self.org_name
 
+# Identifies which organizations a client is affiliated with.
+
 
 class OrganizationMembership(models.Model):
     client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
@@ -63,6 +68,8 @@ class OrganizationMembership(models.Model):
     def __str__(self):
         return f"{self.organization.org_name} {self.client}"
 
+# Identifies which languages a client speaks.
+
 
 class ClientLanguageMembership(models.Model):
     client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
@@ -70,6 +77,8 @@ class ClientLanguageMembership(models.Model):
 
     def __str__(self):
         return f"{self.client} {self.client_language}"
+
+# Identifies which languages an organizations services.
 
 
 class OrgLanguageMembership(models.Model):
@@ -109,6 +118,22 @@ class Event(models.Model):
     end_time = models.DateTimeField()
     privacy = models.BooleanField(default=False)
     max_attendees = models.IntegerField(blank=True, null=True)
+
+    # TODO: CURRENTLY NOT WORKING
+
+    def email_event_create(self):
+
+        email_to = self.event_organizer.email
+
+        send_mail(
+            subject=(f'{self.event_title} on {self.start_time}'),
+            message=(
+                f'{self.event_organizer}, you have successfully created an event titled {self.event_title}. It is scheduled for {self.start_time}.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=email_to,
+            fail_silently=False
+
+        )
 
     def __str__(self):
         return self.event_title
