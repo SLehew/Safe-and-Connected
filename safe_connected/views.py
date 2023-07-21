@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions, filters
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
@@ -7,16 +8,31 @@ from .serializers import OrganizationMembershipSerializer, ClientLanguageMembers
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload
+from safe_connected.permissions import IsManagerOrReadOnly
+
+# Create an event
 
 
 class EventViewSet(generics.CreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsManagerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)
+
+# lists all of a clients events
+
+
+class EventHomeClientViewSet(generics.ListAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+    permission_classes = [
+        permissions.IsAuthenticated]
+
+# List events by organizer, organization, language, or event type.
 
 
 class EventListViewSet(generics.ListCreateAPIView):
@@ -28,12 +44,21 @@ class EventListViewSet(generics.ListCreateAPIView):
         "event_organization",
         "event_language",
         "event_type",
-        "event_title",
     ]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         return self.queryset.filter(event_organizer=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(event_organizer=self.request.user)
+
+
+class EventDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)

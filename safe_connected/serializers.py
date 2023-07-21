@@ -1,7 +1,17 @@
 from rest_framework import serializers
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile
 from .models import OrganizationMembership, ClientLanguageMembership
-from .models import OrgLanguageMembership, EventType, FileUpload
+from .models import OrgLanguageMembership, EventType, FileUpload, User
+from djoser.serializers import UserCreateSerializer
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+class UserRegistrationSerializer(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
+        model = User
+        fields = ('email', 'username', 'role', 'password')
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -77,4 +87,3 @@ class FileUploadSerializer(serializers.ModelSerializer):
             "event",
             "file",
         ]
-

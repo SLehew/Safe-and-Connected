@@ -177,7 +177,17 @@ GOOGLE_API_KEY = env('GOOGLE_API_KEY')
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
-    )
+    ),
+
+
+}
+
+DJOSER = {
+
+    'SERIALIZERS': {
+        'user_create': 'safe_connected.serializers.UserRegistrationSerializer'
+    }
+
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
