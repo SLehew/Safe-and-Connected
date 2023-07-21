@@ -26,7 +26,7 @@ class EventViewSet(generics.CreateAPIView):
 
 
 class EventHomeClientViewSet(generics.ListAPIView):
-    queryset = Event.objects.all()
+    queryset = Event.objects.all(), OrganizationMembership.objects.all()
     serializer_class = EventSerializer
 
     permission_classes = [
