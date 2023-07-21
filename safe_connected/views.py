@@ -8,7 +8,7 @@ from .serializers import OrganizationMembershipSerializer, ClientLanguageMembers
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload
-from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails
+from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz
 
 # Create an event
 
@@ -147,7 +147,8 @@ class OrganizationProfileViewSet(generics.ListCreateAPIView):
     queryset = OrganizationProfile.objects.all()
     serializer_class = OrganizationProfileSerializer
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsManagerOrReadOnlyCreateOrganiz]
 
 
 class EditOrganizationProfileViewSet(generics.RetrieveUpdateDestroyAPIView):
