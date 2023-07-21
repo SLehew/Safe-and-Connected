@@ -44,4 +44,6 @@ urlpatterns = [
     # GET
     path("org/mem/",
          views.MembershipView.as_view(), name="my-memberships"),
+    # GET
+    path("user/<int:pk>/", views.UserRoleView.as_view(), name="user_role"),
 ]

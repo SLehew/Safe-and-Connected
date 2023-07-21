@@ -5,10 +5,15 @@ from rest_framework.views import APIView
 from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer
-from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
+from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer, UserRegistrationSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
+<<<<<<< HEAD
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz
+=======
+from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
+from safe_connected.permissions import IsManagerOrReadOnly
+>>>>>>> main
 
 # Create an event
 
@@ -210,3 +215,9 @@ class MembershipView(generics.ListAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(member=self.request.user)
+
+
+class UserRoleView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [permissions.IsAuthenticated]
