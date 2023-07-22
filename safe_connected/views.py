@@ -8,7 +8,7 @@ from .serializers import OrganizationMembershipSerializer, ClientLanguageMembers
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer, UserRegistrationSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
-from safe_connected.permissions import IsManagerOrReadOnly
+from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz
 
 # Create an event
 
@@ -47,6 +47,7 @@ class EventListViewSet(generics.ListCreateAPIView):
     ]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    # we need to work on this. it's filtering based on who created event
     def get_queryset(self):
         return self.queryset.filter(event_organizer=self.request.user)
 
@@ -58,7 +59,8 @@ class EventDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated,
+                          IsManagerOrReadOnlyEventDetails]
 
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)
@@ -146,7 +148,8 @@ class OrganizationProfileViewSet(generics.ListCreateAPIView):
     queryset = OrganizationProfile.objects.all()
     serializer_class = OrganizationProfileSerializer
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsManagerOrReadOnlyCreateOrganiz]
 
 
 class EditOrganizationProfileViewSet(generics.RetrieveUpdateDestroyAPIView):
@@ -156,7 +159,7 @@ class EditOrganizationProfileViewSet(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class OrganizationMembershipViewSet(generics.CreateAPIView):
+class OrganizationMembershipViewSet(generics.ListCreateAPIView):
     queryset = OrganizationMembership.objects.all()
     serializer_class = OrganizationMembershipSerializer
 
