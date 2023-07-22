@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import User, Lang, ClientProfile, ClientLanguageMembership
 from .models import OrganizationProfile, OrganizationMembership, OrgLanguageMembership
-from .models import EventType, Event, EventRoster, FileUpload
+from .models import EventType, Event, EventRoster, FileUpload, ManagerOrgMembership
 
 
 # Register your models here.
@@ -16,3 +16,4 @@ admin.site.register(EventType)
 admin.site.register(Event)
 admin.site.register(EventRoster)
 admin.site.register(FileUpload)
+admin.site.register(ManagerOrgMembership)
