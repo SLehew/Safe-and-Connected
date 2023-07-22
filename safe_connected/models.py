@@ -83,6 +83,7 @@ class ManagerOrgMembership(models.Model):
 class ClientLanguageMembership(models.Model):
     client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
     client_language = models.ForeignKey(to=Lang, on_delete=models.CASCADE)
+    is_manager = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.client} {self.client_language}"

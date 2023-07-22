@@ -46,4 +46,7 @@ urlpatterns = [
          views.MembershipView.as_view(), name="my-memberships"),
     # GET
     path("user/<int:pk>/", views.UserRoleView.as_view(), name="user_role"),
+    # GET
+    path("org/<int:organization_id>/clients/",
+         views.ClientListView.as_view(), name="org-clients"),
 ]

@@ -166,6 +166,17 @@ class OrganizationMembershipViewSet(generics.CreateAPIView):
         serializer.save()
 
 
+# class OrganizationClientViewSet(generics.ListAPIView):
+#     queryset = OrganizationMembership.objects.all()
+#     serializer_class = OrganizationMembershipSerializer
+
+#     permission_classes = [permissions.IsAuthenticated]
+
+#     def organization_clients(self, organization):
+
+#         members = OrganizationMembership.objects.filter(organization)
+
+
 class ClientLanguageMembershipViewSet(generics.CreateAPIView):
     queryset = ClientLanguageMembership.objects.all()
     serializer_class = ClientLanguageMembershipSerializer
@@ -201,13 +212,25 @@ class MembershipView(generics.ListAPIView):
     serializer_class = MembershipSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = [
-        "member"
+        "member",
     ]
 
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return self.queryset.filter(member=self.request.user)
+
+
+class ClientListView(generics.ListAPIView):
+    queryset = OrganizationMembership.objects.all()
+    serializer_class = MembershipSerializer
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        org_id = self.kwargs['organization_id']
+
+        return OrganizationMembership.objects.filter(organization__id=org_id)
 
 
 class UserRoleView(generics.RetrieveAPIView):
