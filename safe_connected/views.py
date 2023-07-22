@@ -7,13 +7,8 @@ from .serializers import ClientProfileSerializer, OrganizationProfileSerializer,
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer, UserRegistrationSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
-<<<<<<< HEAD
-from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload
-from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz
-=======
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
-from safe_connected.permissions import IsManagerOrReadOnly
->>>>>>> main
+from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz
 
 # Create an event
 
@@ -52,6 +47,7 @@ class EventListViewSet(generics.ListCreateAPIView):
     ]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    # we need to work on this. it's filtering based on who created event
     def get_queryset(self):
         return self.queryset.filter(event_organizer=self.request.user)
 
