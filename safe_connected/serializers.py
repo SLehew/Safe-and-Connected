@@ -24,7 +24,16 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = ('event_title', 'general_notes',
+                  'start_time', 'end_time', 'event_type', 'event_organization')
+
+
+class OrgListEventSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Event
+        fields = ('event_organization', 'event_title',
+                  'start_time', 'end_time', 'event_type')
 
 
 class EventRosterSerializer(serializers.ModelSerializer):
