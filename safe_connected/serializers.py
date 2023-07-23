@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile
-from .models import OrganizationMembership, ClientLanguageMembership
+from .models import OrganizationMembership, ClientLanguageMembership, ManagerOrgMembership
 from .models import OrgLanguageMembership, EventType, FileUpload, User
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from django.contrib.auth import get_user_model
@@ -34,6 +34,13 @@ class EventRosterSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EventRosterSignupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = EventRoster
+        fields = ['event_id']
+
+
 class LangSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -60,6 +67,12 @@ class OrganizationMembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrganizationMembership
         fields = '__all__'
+
+# class ManagerMembershipSerializer(serializers.ModelSerializer):
+
+#     class Meta:
+#         model = ManagerOrgMembership
+#         fields = '__all__'
 
 
 class ClientLanguageMembershipSerializer(serializers.ModelSerializer):
