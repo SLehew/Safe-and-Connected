@@ -17,10 +17,10 @@ urlpatterns = [
     # GET
     path("event/search/", views.EventSearchViewSet.as_view(), name="event-search"),
     # GET|UPDATE|DESTROY
-    path("event/roster/<int:pk>",
-         views.EventRosterViewSet.as_view(), name="event-roster"),
+    path("event/roster/<int:pk>/",
+         views.EventRosterListViewSet.as_view(), name="event-roster"),
     # POST
-    path("event/roster/create/", views.EventRosterCreateViewSet.as_view(),
+    path("event/roster/<int:pk>/create/", views.EventRosterCreateViewSet.as_view(),
          name="event-roster-create"),
     # POST
     path("organization/create/",
