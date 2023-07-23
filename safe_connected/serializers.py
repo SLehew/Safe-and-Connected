@@ -24,8 +24,8 @@ class EventSerializer(serializers.ModelSerializer):
 class EventRosterSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = EventRoster
-        fields = '__all__'
+        model = Event
+        fields = ['event_attendees']
 
 
 class LangSerializer(serializers.ModelSerializer):

@@ -7,7 +7,8 @@ urlpatterns = [
     # POST
     path("event/create/", views.EventViewSet.as_view(), name="create-event"),
     # GET
-    path("event/list/", views.EventListViewSet.as_view(), name="list-event"),
+    path("event/organizer/list/",
+         views.EventListViewSet.as_view(), name="list-event"),
     # GET
     path("Client/event/list/", views.EventHomeClientViewSet.as_view(),
          name="client-list-event"),
@@ -15,12 +16,17 @@ urlpatterns = [
     path("event/<int:pk>/details/",
          views.EventDetailViewSet.as_view(), name="event-detail"),
     # GET
+    path("event/all/", views.EventSearchViewSet.as_view(), name="event-all"),
+    # GET| add (/?event_title= or /?general_notes=) to url
     path("event/search/", views.EventSearchViewSet.as_view(), name="event-search"),
-    # GET|UPDATE|DESTROY
-    path("event/roster/<int:pk>",
+    # GET List of Clients Attending
+    path("event/roster/<int:pk>/",
          views.EventRosterViewSet.as_view(), name="event-roster"),
+    # PATCH Client Sign Up for Event
+    path("event/roster/<int:pk>/signup/",
+         views.EventRosterUpdateViewSet.as_view(), name="event-roster"),
     # POST
-    path("event/roster/create/", views.EventRosterCreateViewSet.as_view(),
+    path("event/roster/signup/", views.EventRosterCreateViewSet.as_view(),
          name="event-roster-create"),
     # POST
     path("organization/create/",

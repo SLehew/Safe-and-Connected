@@ -97,20 +97,22 @@ class EventRosterCreateViewSet(generics.CreateAPIView):
         serializer.save(client_attendee=self.request.user)
 
 
-class EventRosterViewSet(generics.RetrieveUpdateDestroyAPIView):
-    queryset = EventRoster.objects.all()
+class EventRosterViewSet(generics.RetrieveAPIView):
+    queryset = Event.objects.all()
     serializer_class = EventRosterSerializer
-    search_fields = [
-        "event_id",
-        "client_attendee",
-    ]
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get_queryset(self):
-        return self.queryset.filter(client_attendee=self.request.user)
 
-    def perform_create(self, serializer):
+class EventRosterUpdateViewSet(generics.UpdateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventRosterSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_update(self, serializer):
+        event_instance = serializer.instance
+        event_instance.event_attendees.add(self.request.user)
         serializer.save()
 
 

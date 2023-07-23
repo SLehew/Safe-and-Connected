@@ -23,7 +23,7 @@ https://safe-connected.onrender.com/
 | `role`    | `str`    |Client/Manager                     |
 
 
-#### Create Token
+#### Create Token Login
 
 ```https://safe-connected.onrender.com/
   POST /auth/token/login
@@ -49,19 +49,28 @@ https://safe-connected.onrender.com/
 | :--------      | :------- | :-------------------------------- |
 |`event_title`   |`str`     |                                   |
 | `general_notes`| `str`    |                                   |
+| `event_type   `| `int`    |                                   |
 
-### List Event
+
+### List All Events
 
 ```https://safe-connected.onrender.com/
-  GET /event/list/
+  GET /event/all/
 ```
-### Search Event
+### List All Organizers Events
+
+```https://safe-connected.onrender.com/
+  GET event/organizer/list/
+```
+
+### Search Title of Event or Notes
+add (/?event_title= or /?general_notes=) to url
 
 ```https://safe-connected.onrender.com/
   GET /event/search/
 ```
 
-### Create Event Roster
+### Client Signup for Event
 
 ```https://safe-connected.onrender.com/
   POST /event/roster/create/

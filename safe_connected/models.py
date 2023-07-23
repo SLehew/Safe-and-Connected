@@ -128,6 +128,8 @@ class Event(models.Model):
     end_time = models.DateTimeField()
     privacy = models.BooleanField(default=False)
     max_attendees = models.IntegerField(blank=True, null=True)
+    event_attendees = models.ManyToManyField(
+        User, related_name='attended_events')
 
     # TODO: CURRENTLY NOT WORKING
 
