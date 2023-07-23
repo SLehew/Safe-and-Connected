@@ -1,14 +1,15 @@
 from rest_framework import generics, permissions, filters
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer
-from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer, UserRegistrationSerializer
+from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer, UserRegistrationSerializer, EventRosterSignupSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
-from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz
+from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz, IsManagerOrReadOnlyEditOrganiz, IsManagerOnlyClientList
 
 # Create an event
 
@@ -87,14 +88,24 @@ class EventSearchViewSet(APIView):
         return Response(serializer.data)
 
 
-class EventRosterCreateViewSet(generics.CreateAPIView):
+class EventRosterCreateViewSet(generics.UpdateAPIView):
+    queryset = EventRoster.objects.all()
+    serializer_class = EventRosterSignupSerializer
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(attendee=self.request.user)
+
+
+class EventRosterListViewSet(generics.ListAPIView):
     queryset = EventRoster.objects.all()
     serializer_class = EventRosterSerializer
 
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(client_attendee=self.request.user)
+        serializer.save()
 
 
 class EventRosterViewSet(generics.RetrieveAPIView):
@@ -158,10 +169,11 @@ class EditOrganizationProfileViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = OrganizationProfile.objects.all()
     serializer_class = OrganizationProfileSerializer
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsManagerOrReadOnlyEditOrganiz]
 
 
-class OrganizationMembershipViewSet(generics.ListCreateAPIView):
+class OrganizationMembershipViewSet(generics.CreateAPIView):
     queryset = OrganizationMembership.objects.all()
     serializer_class = OrganizationMembershipSerializer
 
@@ -230,12 +242,18 @@ class ClientListView(generics.ListAPIView):
     queryset = OrganizationMembership.objects.all()
     serializer_class = MembershipSerializer
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsManagerOnlyClientList]
 
     def get_queryset(self):
         org_id = self.kwargs['organization_id']
+        user_in_organiz = OrganizationMembership.objects.filter(
+            member=self.request.user, organization__id=org_id).exists()
+        if not user_in_organiz:
+            raise PermissionDenied('You are not allowed to do this')
+        else:
+            return OrganizationMembership.objects.filter(organization__id=org_id)
 
-        return OrganizationMembership.objects.filter(organization__id=org_id)
+        # return OrganizationMembership.objects.filter(organization__id=org_id)
 
 
 class UserRoleView(generics.RetrieveAPIView):

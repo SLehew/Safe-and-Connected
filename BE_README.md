@@ -136,9 +136,42 @@ add (/?event_title= or /?general_notes=) to url
 ### Add language 
 
 ```https://safe-connected.onrender.com/
-  POST language/add/
+  POST /language/add/
 ```
 
 | Parameter        | Type     | Description                       |
 | :--------        | :------- | :-------------------------------- |
 |`lang`            |`str`     |                                   |
+
+### create membership
+
+```https://safe-connected.onrender.com/
+  POST /org/client/mem/create/
+```
+
+| Parameter        | Type     | Description                       |
+| :--------        | :------- | :-------------------------------- |
+|`member`          |`str`     |                                   |
+|`organization`    |`str`     |                                   |
+
+### Add file 
+
+```https://safe-connected.onrender.com/
+  POST /uploads/
+```
+
+| Parameter        | Type     | Description                       |
+| :--------        | :------- | :-------------------------------- |
+|`file`            |`file`    |                                   |
+
+### view organiz you are a member of
+
+```https://safe-connected.onrender.com/
+  GET /org/mem/
+```
+
+### view list of all members of an organization
+
+```https://safe-connected.onrender.com/
+  GET /org/<int:organization_id>/clients/
+```
