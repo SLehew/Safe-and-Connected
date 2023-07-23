@@ -45,11 +45,12 @@ https://safe-connected.onrender.com/
   POST /event/create/
 ```
 
-| Parameter      | Type     | Description                       |
-| :--------      | :------- | :-------------------------------- |
-|`event_title`   |`str`     |                                   |
-| `general_notes`| `str`    |                                   |
-| `event_type   `| `int`    |                                   |
+| Parameter           | Type     | Description                       |
+| :--------           | :------- | :-------------------------------- |
+|`event_title`        |`str`     |                                   |
+| `general_notes`     | `str`    |                                   |
+| `event_type`        | `int`    |                                   |
+| `event_organization`| `int`    |                                   |
 
 
 ### List All Events
@@ -73,16 +74,8 @@ add (/?event_title= or /?general_notes=) to url
 ### Client Signup for Event
 
 ```https://safe-connected.onrender.com/
-  POST /event/roster/create/
+  PATCH /event/roster//signup/
 ```
-
-| Parameter        | Type     | Description                       |
-| :--------        | :------- | :-------------------------------- |
-|`event_id`           |`str`  |                                   |
-| `client_attendee`   | `str` |                                   |
-|`event_manager`      |`str`  |                                   |
-| `event_organization`|`str`  |                                   |
-
 
 ### Get event roster details
 ```https://safe-connected.onrender.com/

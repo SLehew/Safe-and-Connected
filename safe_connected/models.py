@@ -110,9 +110,9 @@ class EventType(models.Model):
 class Event(models.Model):
 
     event_organizer = models.ForeignKey(
-        to=User, on_delete=models.CASCADE, blank=True)
+        to=User, on_delete=models.CASCADE)
     event_organization = models.ForeignKey(
-        to=OrganizationProfile, on_delete=models.CASCADE, blank=True)
+        to=OrganizationProfile, on_delete=models.CASCADE)
     event_language = models.ForeignKey(
         to=Lang, on_delete=models.CASCADE, default=1)
     event_title = models.CharField(max_length=250)
@@ -129,7 +129,7 @@ class Event(models.Model):
     privacy = models.BooleanField(default=False)
     max_attendees = models.IntegerField(blank=True, null=True)
     event_attendees = models.ManyToManyField(
-        User, related_name='attended_events')
+        User, related_name='attended_events', null=True, blank=True)
 
     # TODO: CURRENTLY NOT WORKING
 

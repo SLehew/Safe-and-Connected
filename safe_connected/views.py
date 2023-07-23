@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
-from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer
+from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer, OrgListEventSerializer
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer, UserRegistrationSerializer, EventRosterSignupSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
@@ -15,13 +15,14 @@ from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyE
 
 
 class EventViewSet(generics.CreateAPIView):
-    queryset = Event.objects.all()
+    queryset1 = Event.objects.all()
     serializer_class = EventSerializer
 
     permission_classes = [IsAuthenticated, IsManagerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)
+
 
 # lists all of a clients events
 
@@ -54,6 +55,18 @@ class EventListViewSet(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(event_organizer=self.request.user)
+
+
+class OrgEventListViewSet(generics.ListCreateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = OrgListEventSerializer
+
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        org_id = self.kwargs['organization_id']
+
+        return Event.objects.filter(event_organization__id=org_id)
 
 
 class EventDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
