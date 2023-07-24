@@ -20,6 +20,7 @@ django-phonenumbers = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
 django-address = "*"
+django-extensions = "*"
 
 [dev-packages]
 

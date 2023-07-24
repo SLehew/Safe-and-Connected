@@ -15,13 +15,17 @@ from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyE
 
 
 class EventViewSet(generics.CreateAPIView):
-    queryset1 = Event.objects.all()
+    queryset = Event.objects.all()
     serializer_class = EventSerializer
 
     permission_classes = [IsAuthenticated, IsManagerOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(event_organizer=self.request.user)
+        event_organizer = self.request.user
+        event_organization_id = event_organizer.organiz_memberships.first().organization_id
+
+        serializer.save(event_organizer=event_organizer,
+                        event_organization_id=event_organization_id)
 
 
 # lists all of a clients events
