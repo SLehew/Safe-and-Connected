@@ -132,8 +132,6 @@ class Event(models.Model):
     event_attendees = models.ManyToManyField(
         User, related_name='attended_events', blank=True)
 
-    # TODO: CURRENTLY NOT WORKING
-
     def email_event_create(self):
 
         email_to = [self.event_organizer.email]
@@ -148,14 +146,14 @@ class Event(models.Model):
 
         )
 
-    def email_event_signup(self):
+    def email_event_signup(self, user):
 
-        email_to = [self.user.email]
+        email_to = [user.email]
 
         send_mail(
             subject=(f'{self.event_title} on {self.start_time}'),
             message=(
-                f'{self.event_attendees.first_name}, you have successfully created an event titled {self.event_title}. It is scheduled for {self.start_time}.'),
+                f'{user.first_name}, you have signed up to attend {self.event_title}. It is scheduled for {self.start_time}.'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=email_to,
             fail_silently=False
