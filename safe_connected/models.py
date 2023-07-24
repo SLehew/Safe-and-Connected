@@ -130,9 +130,7 @@ class Event(models.Model):
     privacy = models.BooleanField(default=False)
     max_attendees = models.IntegerField(blank=True, null=True)
     event_attendees = models.ManyToManyField(
-        User, related_name='attended_events', null=True, blank=True)
-
-    # TODO: CURRENTLY NOT WORKING
+        User, related_name='attended_events', blank=True)
 
     def email_event_create(self):
 
@@ -142,6 +140,20 @@ class Event(models.Model):
             subject=(f'{self.event_title} on {self.start_time}'),
             message=(
                 f'{self.event_organizer}, you have successfully created an event titled {self.event_title}. It is scheduled for {self.start_time}.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=email_to,
+            fail_silently=False
+
+        )
+
+    def email_event_signup(self, user):
+
+        email_to = [user.email]
+
+        send_mail(
+            subject=(f'{self.event_title} on {self.start_time}'),
+            message=(
+                f'{user.first_name}, you have signed up to attend {self.event_title}. It is scheduled for {self.start_time}.'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=email_to,
             fail_silently=False
