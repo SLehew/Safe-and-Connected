@@ -21,11 +21,15 @@ class UserSerializer(UserSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
+    number_attending = serializers.SerializerMethodField()
+
+    def get_number_attending(self, obj):
+        return obj.event_attendees.count()
 
     class Meta:
         model = Event
         fields = ('id', 'event_title', 'general_notes',
-                  'start_time', 'end_time', 'event_type')
+                  'start_time', 'end_time', 'event_type', 'number_attending')
 
 
 class OrgListEventSerializer(serializers.ModelSerializer):

@@ -114,6 +114,7 @@ class EventRosterCreateViewSet(generics.UpdateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(attendee=self.request.user)
+        serializer.instance.email_event_signup()
 
 
 class EventRosterListViewSet(generics.ListAPIView):
@@ -141,7 +142,8 @@ class EventRosterUpdateViewSet(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         event_instance = serializer.instance
-        event_instance.event_attendees.add(self.request.user)
+        event_instance.event_attendees.add(
+            self.request.user)
         serializer.save()
 
 
