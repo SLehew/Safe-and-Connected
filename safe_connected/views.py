@@ -10,7 +10,8 @@ from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, 
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz, IsManagerOrReadOnlyEditOrganiz, IsManagerOnlyClientList
-
+from config import settings
+from django.core.mail import send_mail
 # Create an event
 
 
@@ -23,9 +24,9 @@ class EventViewSet(generics.CreateAPIView):
     def perform_create(self, serializer):
         event_organizer = self.request.user
         event_organization_id = event_organizer.organiz_memberships.first().organization_id
-
         serializer.save(event_organizer=event_organizer,
                         event_organization_id=event_organization_id)
+        serializer.instance.email_event_create()
 
 
 # lists all of a clients events
