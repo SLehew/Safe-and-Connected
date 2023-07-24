@@ -144,7 +144,9 @@ class EventRosterUpdateViewSet(generics.UpdateAPIView):
         event_instance = serializer.instance
         event_instance.event_attendees.add(
             self.request.user)
+        event_instance.email_event_signup(self.request.user)
         serializer.save()
+
 
 
 class LanguageViewSet(generics.CreateAPIView):
