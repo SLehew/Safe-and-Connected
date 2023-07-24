@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'storages',
     'phonenumber_field',
     'address',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
