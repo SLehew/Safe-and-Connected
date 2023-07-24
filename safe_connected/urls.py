@@ -19,7 +19,7 @@ urlpatterns = [
     # GET | List ALL Events
     path("event/all/", views.EventSearchViewSet.as_view(), name="event-all"),
     # GET | List All Organizations Events
-    path("org/<int:organization_id>/events/",
+    path("org/<int:event_organization_id>/events/",
          views.OrgEventListViewSet.as_view(), name="org_events"),
     # GET| add (/?event_title= or /?general_notes=) to url | Text Search Event Titles & Notes
     path("event/search/", views.EventSearchViewSet.as_view(), name="event-search"),

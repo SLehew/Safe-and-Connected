@@ -69,9 +69,18 @@ class OrgEventListViewSet(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        org_id = self.kwargs['organization_id']
+        org_id = self.kwargs['event_organization_id']
+        user_in_organiz = Event.objects.filter(
+            event_organizer=self.request.user, event_organization__id=org_id).exists()
+        if not user_in_organiz:
+            raise PermissionDenied('You are not allowed to do this')
+        else:
+            return Event.objects.filter(event_organization__id=org_id)
 
-        return Event.objects.filter(event_organization__id=org_id)
+    # def get_queryset(self):
+    #     org_id = self.kwargs['organization_id']
+
+    #     return Event.objects.filter(event_organization__id=org_id)
 
 
 class EventDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
