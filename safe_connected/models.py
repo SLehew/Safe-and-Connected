@@ -136,7 +136,7 @@ class Event(models.Model):
 
     def email_event_create(self):
 
-        email_to = self.event_organizer.email
+        email_to = [self.event_organizer.email]
 
         send_mail(
             subject=(f'{self.event_title} on {self.start_time}'),
