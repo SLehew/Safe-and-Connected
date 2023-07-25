@@ -36,7 +36,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('id', 'event_title', 'general_notes',
+        fields = ('id', 'event_title', 'general_notes', 'event_date',
                   'start_time', 'end_time', 'event_type', 'number_attending', 'event_language', 'street_number', 'street_name', 'city', 'state', 'zipcode', 'privacy', 'max_attendees', 'full_address')
 
     def get_full_address(self, obj):
@@ -47,7 +47,7 @@ class OrgListEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ('event_organization', 'event_title',
+        fields = ('event_organization', 'event_title', 'event_date',
                   'start_time', 'end_time', 'event_type')
 
 
