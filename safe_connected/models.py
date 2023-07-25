@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from config import settings
 from datetime import date, time
 
@@ -164,20 +164,16 @@ class Event(models.Model):
 
     def email_event_edit(self):
 
-        attendees_list = self.event_attendees.all()
-        email_to = []
-        for attendee in attendees_list:
-            email_to.append(attendee.email)
-
-        send_mail(
+        email = EmailMessage(
             subject=(f'{self.event_title} on {self.start_time}'),
-            message=(
+            body=(
                 f'{self.event_organizer}, has made a change to {self.event_title}. It is scheduled for {self.start_time}. Please check to make sure you can still attend.'),
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=email_to,
-            fail_silently=False
+            to=[self.event_organizer.email],
+            bcc=self.event_attendees.all(),
 
         )
+        email.send()
 
     def __str__(self):
         return self.event_title
