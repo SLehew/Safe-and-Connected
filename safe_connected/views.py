@@ -90,9 +90,9 @@ class EventDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated,
                           IsManagerOrReadOnlyEventDetails]
 
-    def perform_create(self, serializer):
-        serializer.instance.email_event_edit()
+    def perform_update(self, serializer):
         serializer.save(event_organizer=self.request.user)
+        serializer.instance.email_event_edit()
 
 
 class EventSearchViewSet(APIView):
