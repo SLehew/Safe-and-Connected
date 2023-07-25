@@ -91,6 +91,7 @@ class EventDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
                           IsManagerOrReadOnlyEventDetails]
 
     def perform_create(self, serializer):
+        serializer.instance.email_event_edit()
         serializer.save(event_organizer=self.request.user)
 
 
@@ -155,7 +156,6 @@ class EventRosterUpdateViewSet(generics.UpdateAPIView):
             self.request.user)
         event_instance.email_event_signup(self.request.user)
         serializer.save()
-
 
 
 class LanguageViewSet(generics.CreateAPIView):

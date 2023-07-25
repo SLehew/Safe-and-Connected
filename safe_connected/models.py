@@ -160,6 +160,23 @@ class Event(models.Model):
 
         )
 
+    def email_event_edit(self):
+
+        attendees_list = self.event_attendees.all()
+        email_to = []
+        for attendee in attendees_list:
+            email_to.append(attendee.email)
+
+        send_mail(
+            subject=(f'{self.event_title} on {self.start_time}'),
+            message=(
+                f'{self.event_organizer}, has made a change to {self.event_title}. It is scheduled for {self.start_time}. Please check to make sure you can still attend.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=email_to,
+            fail_silently=False
+
+        )
+
     def __str__(self):
         return self.event_title
 
