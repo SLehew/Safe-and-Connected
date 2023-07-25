@@ -28,7 +28,8 @@ class UserSerializer(UserSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    number_attending = serializers.SerializerMethodField()
+    number_attending = serializers.SerializerMethodField(read_only=True)
+    full_address = serializers.SerializerMethodField(read_only=True)
 
     def get_number_attending(self, obj):
         return obj.event_attendees.count()
@@ -36,7 +37,10 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('id', 'event_title', 'general_notes',
-                  'start_time', 'end_time', 'event_type', 'number_attending')
+                  'start_time', 'end_time', 'event_type', 'number_attending', 'event_language', 'street_number', 'street_name', 'city', 'state', 'zipcode', 'privacy', 'max_attendees', 'full_address')
+
+    def get_full_address(self, obj):
+        return f"{obj.street_number} {obj.street_name} {obj.city}, {obj.state} {obj.zipcode}"
 
 
 class OrgListEventSerializer(serializers.ModelSerializer):
