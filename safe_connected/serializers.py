@@ -8,16 +8,23 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class UserRegistrationSerializer(UserCreateSerializer):
-    class Meta(UserCreateSerializer.Meta):
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
         model = User
-        fields = ('email', 'username', 'role', 'password', 'id')
+        fields = ('email', 'username', 'role', 'password',
+                  'id', 'first_name', 'last_name', 'full_name')
+
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
 
 
 class UserSerializer(UserSerializer):
+
     class Meta(UserSerializer.Meta):
         model = User
-        fields = ('email', 'username', 'role', 'id')
+        fields = ('email', 'username', 'role', 'id', 'first_name', 'last_name')
 
 
 class EventSerializer(serializers.ModelSerializer):
