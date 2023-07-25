@@ -10,7 +10,7 @@ urlpatterns = [
     path("event/organizer/list/",
          views.EventListViewSet.as_view(), name="list-event"),
     # GET | List All Events for Clients Organizations
-    path("Client/event/list/", views.EventHomeClientViewSet.as_view(),
+    path("client/event/list/", views.EventHomeClientViewSet.as_view(),
          name="client-list-event"),
     # GET|UPDATE|DELETE | Manager Edit Event
     path("event/<int:pk>/details/",

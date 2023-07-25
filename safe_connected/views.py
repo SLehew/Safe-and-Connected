@@ -10,8 +10,7 @@ from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, 
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz, IsManagerOrReadOnlyEditOrganiz, IsManagerOnlyClientList
-from config import settings
-from django.core.mail import send_mail
+from django.utils.timezone import now
 # Create an event
 
 
@@ -33,11 +32,20 @@ class EventViewSet(generics.CreateAPIView):
 
 
 class EventHomeClientViewSet(generics.ListAPIView):
-    queryset = Event.objects.all(), OrganizationMembership.objects.all()
     serializer_class = EventSerializer
-
     permission_classes = [
         permissions.IsAuthenticated]
+    # Filters to not show events that have past dates and orders by closest date
+
+    def get_queryset(self):
+
+        today = now().date()
+
+        queryset = Event.objects.filter(event_date__gte=today) | Event.objects.filter(
+            event_date__isnull=True)
+        queryset = queryset.order_by('event_date')
+
+        return queryset
 
 # List events by organizer, organization, language, or event type.
 
@@ -51,6 +59,7 @@ class EventListViewSet(generics.ListCreateAPIView):
         "event_organization",
         "event_language",
         "event_type",
+        "event_date",
     ]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
