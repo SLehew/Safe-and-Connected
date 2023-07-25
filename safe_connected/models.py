@@ -125,8 +125,9 @@ class Event(models.Model):
     city = models.CharField(max_length=250, blank=True, null=True)
     state = models.CharField(max_length=2, blank=True, null=True)
     zipcode = models.CharField(max_length=25, default='27514')
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    event_date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     privacy = models.BooleanField(default=False)
     max_attendees = models.IntegerField(blank=True, null=True)
     event_attendees = models.ManyToManyField(
@@ -139,7 +140,7 @@ class Event(models.Model):
         send_mail(
             subject=(f'{self.event_title} on {self.start_time}'),
             message=(
-                f'{self.event_organizer}, you have successfully created an event titled {self.event_title}. It is scheduled for {self.start_time}.'),
+                f'{self.event_organizer}, you have successfully created an event titled {self.event_title}. It is scheduled for {self.event_date} from {self.start_time} to {self.end_time}.'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=email_to,
             fail_silently=False
@@ -153,7 +154,7 @@ class Event(models.Model):
         send_mail(
             subject=(f'{self.event_title} on {self.start_time}'),
             message=(
-                f'{user.first_name}, you have signed up to attend {self.event_title}. It is scheduled for {self.start_time}.'),
+                f'{user.first_name}, you have signed up to attend {self.event_title}. It is scheduled for {self.event_date} from {self.start_time} to {self.end_time}.'),
             from_email=settings.EMAIL_HOST_USER,
             recipient_list=email_to,
             fail_silently=False
