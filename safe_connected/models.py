@@ -125,9 +125,11 @@ class Event(models.Model):
     city = models.CharField(max_length=250, blank=True, null=True)
     state = models.CharField(max_length=2, blank=True, null=True)
     zipcode = models.CharField(max_length=25, default='27514')
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
     event_date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    event_start_time = models.TimeField()
+    event_end_time = models.TimeField()
     privacy = models.BooleanField(default=False)
     max_attendees = models.IntegerField(blank=True, null=True)
     event_attendees = models.ManyToManyField(
