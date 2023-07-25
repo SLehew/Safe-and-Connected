@@ -49,7 +49,7 @@ if env("RENDER"):
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -65,12 +65,16 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'address',
     'django_extensions',
+    'modeltranslation',
+    'django.contrib.admin',
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -130,6 +134,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+LOCALE_PATHS = [
+    BASE_DIR, 'locale/',
+]
+
+MODELTRANSLATION_DEFAULT_LANGUAGES = 'en'
+MODELTRANSLATION_LANGUAGES = ('en-us', 'es', 'fr')
 
 TIME_ZONE = 'UTC'
 

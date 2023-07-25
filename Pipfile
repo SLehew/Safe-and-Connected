@@ -21,6 +21,7 @@ djoser = "*"
 djangorestframework-simplejwt = "*"
 django-address = "*"
 django-extensions = "*"
+django-modeltranslation = "*"
 
 [dev-packages]
 

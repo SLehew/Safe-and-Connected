@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b8b8502c3610a0421f8559e6980f7449af9c7d68c58adc9f694a253c45a86109"
+            "sha256": "b4c61761d366c346e61cb0bdb9f7a661dbd78baeb4d7733d4cefc47e5710069a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -26,19 +26,19 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:01f078047eb4d238c6b9c6cc623f2af33b4ae67980c5326691e35cb5493ff6c7",
-                "sha256:4cc0c6005be910e52077227e670930ab55a41ba86cdb6d1c052571d08cd4d32c"
+                "sha256:67001b3f512cbe2e00e352c65fb443b504e5e388fee39d73bcc42da1ae87d9e3",
+                "sha256:cb8af03f553f1c7db7137bc897785baeeaa97b8fde483eb1cdb1f1ef3cec9cb7"
             ],
             "index": "pypi",
-            "version": "==1.28.9"
+            "version": "==1.28.10"
         },
         "botocore": {
             "hashes": [
-                "sha256:bd849d3ac95f1781385ed831d753a04a3ec870a59d6598175aaedd71dc2baf5f",
-                "sha256:e56ccd3536a90094ea5b176b5dd33bfe4f049efdf71af468ea1661bd424c787d"
+                "sha256:736a9412f405d6985570c4a87b533c2396dd8d4042d8c7a0ca14e73d4f1bcf9d",
+                "sha256:a3bfd3627a490faedf37d79373d6957936d7720888ca85466e0471cb921e4557"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.31.9"
+            "version": "==1.31.10"
         },
         "certifi": {
             "hashes": [
@@ -280,6 +280,14 @@
             ],
             "index": "pypi",
             "version": "==3.2.3"
+        },
+        "django-modeltranslation": {
+            "hashes": [
+                "sha256:81b68e4dc806a3b779ac88babe1cbd99d5318d374a43b3737a65fb0f4c1cffe8",
+                "sha256:a6e2c459e3b31852287d030bc6e29fa28576db97455dccd399fe08ac8e9223b9"
+            ],
+            "index": "pypi",
+            "version": "==0.18.11"
         },
         "django-phonenumber-field": {
             "hashes": [
@@ -548,7 +556,7 @@
                 "sha256:440d5dd3af93b060174bf433bccd69b0babc3b15b1a8dca43789fd7f61514b36",
                 "sha256:b75ddc264f0ba5615db7ba217daeb99701ad295353c45f9e95963337ceeeffb2"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.7'",
             "version": "==4.7.1"
         },
         "urllib3": {
