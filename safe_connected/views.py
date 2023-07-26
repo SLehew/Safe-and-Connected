@@ -75,7 +75,7 @@ class OrgEventListViewSet(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = OrgListEventSerializer
 
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         org_id = self.kwargs['event_organization_id']
