@@ -58,6 +58,16 @@ class EventRosterSerializer(serializers.ModelSerializer):
         fields = ['event_attendees']
 
 
+class EventRosterNameSerializer(serializers.ModelSerializer):
+
+    event_attendees = serializers.SlugRelatedField(
+        many=True, slug_field='username', queryset=User.objects.all())
+
+    class Meta:
+        model = Event
+        fields = ['event_attendees']
+
+
 class EventRosterSignupSerializer(serializers.ModelSerializer):
 
     class Meta:
