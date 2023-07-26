@@ -110,13 +110,22 @@ class EventType(models.Model):
 
 
 class Event(models.Model):
+    SPANISH = "es"
+    FRENCH = "fr"
+    SWAHILI = "sw"
+
+    LANGUAGE_CHOICES = [
+        (SPANISH, "es"),
+        (FRENCH, "fr"),
+        (SWAHILI, "sw"),
+    ]
 
     event_organizer = models.ForeignKey(
         to=User, on_delete=models.CASCADE)
     event_organization = models.ForeignKey(
         to=OrganizationProfile, on_delete=models.CASCADE)
-    event_language = models.ForeignKey(
-        to=Lang, on_delete=models.CASCADE, default=1)
+    event_language = models.CharField(
+        max_length=5, choices=LANGUAGE_CHOICES, null=False, blank=False)
     event_title = models.CharField(max_length=250)
     event_type = models.ForeignKey(
         to=EventType, on_delete=models.CASCADE, default=1)
