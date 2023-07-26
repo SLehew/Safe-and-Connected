@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer, OrgListEventSerializer
-from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer, UserRegistrationSerializer, EventRosterSignupSerializer
+from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer, UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz, IsManagerOrReadOnlyEditOrganiz, IsManagerOnlyClientList
@@ -148,7 +148,7 @@ class EventRosterListViewSet(generics.ListAPIView):
 
 class EventRosterViewSet(generics.RetrieveAPIView):
     queryset = Event.objects.all()
-    serializer_class = EventRosterSerializer
+    serializer_class = EventRosterNameSerializer
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
