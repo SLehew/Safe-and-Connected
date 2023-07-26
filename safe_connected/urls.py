@@ -12,7 +12,7 @@ urlpatterns = [
     # GET | List All Events for Clients Organizations
     path("client/event/list/", views.EventHomeClientViewSet.as_view(),
          name="client-list-event"),
-    # GET|UPDATE|DELETE | Manager Edit Event
+    # PATCH|UPDATE|DELETE | Manager Edit Event
     path("event/<int:pk>/details/",
          views.EventDetailViewSet.as_view(), name="event-detail"),
     # GET | List ALL Events
@@ -22,7 +22,7 @@ urlpatterns = [
          views.OrgEventListViewSet.as_view(), name="org_events"),
     # GET| add (/?event_title= or /?general_notes=) to url | Text Search Event Titles & Notes
     path("event/search/", views.EventSearchViewSet.as_view(), name="event-search"),
-    # GET List of Clients Attending Event
+    # GET List of Clients Attending Event (pk is event_id)
     path("event/roster/<int:pk>/",
          views.EventRosterViewSet.as_view(), name="event-roster"),
     # PATCH | Client Sign Up for Event (pk is event_id)

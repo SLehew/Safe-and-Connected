@@ -21,6 +21,7 @@ https://safe-connected.onrender.com/
 |`username` |`str`     |                                   |
 | `password`| `str`    |                                   |
 | `role`    | `str`    |Client/Manager                     |
+| `language`| `int`    |                                   |
 
 
 #### Create Token Login
@@ -52,44 +53,68 @@ https://safe-connected.onrender.com/
 | `event_type`        | `int`    |                                   |
 | `event_organization`| `int`    |                                   |
 
+#### Manager Edit Event
+
+```https://safe-connected.onrender.com/
+  PATCH event/<int:pk>/details/
+```
+
+| Parameter           | Type     | Description                       |
+| :--------           | :------- | :-------------------------------- |
+|`event_title`        | `str`    |                                   |
+| `general_notes`     | `str`    |                                   |
+| `event_date`        | `date`   |        `YYYY-MM-DD `              |
+| `start_time`        | `time`   |        `HH:MM:SS`                 |
+| `end_time`          | `time`   |        `HH:MM:SS`                 |
+| `event_type`        | `int`    |                                   |
+| `event_language`    | `int`    |                                   |
+| `street_number`     | `int`    |                                   |
+| `street_name`       | `str`    |                                   |
+| `city`              | `str`    |                                   |
+| `state`             | `str`    |                                   |
+| `zipcode`           | `int`    |                                   |
+| `privacy`           | `bool`   |                                   |
 
 ### List All Events
 
 ```https://safe-connected.onrender.com/
   GET /event/all/
 ```
-### List All Organizers Events
+### List All Clients Available Events
+
+```https://safe-connected.onrender.com/
+  GET /event/all/
+```
+### List All of an Organizations Events
+
+```https://safe-connected.onrender.com/
+  GET org/<int:event_organization_id>/events/
+```
+
+### List All Events Created by the Manager
 
 ```https://safe-connected.onrender.com/
   GET event/organizer/list/
 ```
 
 ### Search Title of Event or Notes
-add (/?event_title= or /?general_notes=) to url
+`add (/?event_title=<searchtext> or /?general_notes=<searchtext>) to url`
 
 ```https://safe-connected.onrender.com/
   GET /event/search/
 ```
 
 ### Client Signup for Event
+`(pk is event_id)`
 
 ```https://safe-connected.onrender.com/
-  PATCH /event/roster//signup/
+  PATCH /event/roster/<int:pk>/signup/
 ```
 
-### Get event roster details
+### List of Clients Attending Event
+`(pk is event_id)`
 ```https://safe-connected.onrender.com/
   GET /event/roster/<int:pk>/
-```
-
-### Update event roster details
-```https://safe-connected.onrender.com/
-  PATCH /event/roster/<int:pk>/
-```
-
-### Delete event roster
-```https://safe-connected.onrender.com/
-  DELETE /event/roster/<int:pk>/
 ```
 
 ### Create Organization profile
@@ -98,10 +123,33 @@ add (/?event_title= or /?general_notes=) to url
   POST /organization/create/
 ```
 
-| Parameter        | Type     | Description                       |
-| :--------        | :------- | :-------------------------------- |
-|`org_name`           |`str`  |                                   |
+| Parameter           | Type     | Description                       |
+| :--------           | :------- | :-------------------------------- |
+|`org_name`           |`str`     |                                   |
+| `street_number`     | `int`    |                                   |
+| `street_name`       | `str`    |                                   |
+| `city`              | `str`    |                                   |
+| `state`             | `str`    |                                   |
+| `zipcode`           | `int`    |                                   |
+| `phone`             | `int`    |                                   |
+| `org_notes`         | `str`    |                                   |
 
+### Create Organization profile
+
+```https://safe-connected.onrender.com/
+  PATCH "organization/edit/<int:pk>/"
+```
+
+| Parameter           | Type     | Description                       |
+| :--------           | :------- | :-------------------------------- |
+|`org_name`           |`str`     |                                   |
+| `street_number`     | `int`    |                                   |
+| `street_name`       | `str`    |                                   |
+| `city`              | `str`    |                                   |
+| `state`             | `str`    |                                   |
+| `zipcode`           | `int`    |                                   |
+| `phone`             | `int`    |                                   |
+| `org_notes`         | `str`    |                                   |
 ### Get Organization list
 
 ```https://safe-connected.onrender.com/
@@ -118,12 +166,6 @@ add (/?event_title= or /?general_notes=) to url
 
 ```https://safe-connected.onrender.com/
   PATCH /organization/<int:pk>/
-```
-
-### Delete Organization 
-
-```https://safe-connected.onrender.com/
-  DELETE /organization/<int:pk>/
 ```
 
 ### Add language 
@@ -157,13 +199,13 @@ add (/?event_title= or /?general_notes=) to url
 | :--------        | :------- | :-------------------------------- |
 |`file`            |`file`    |                                   |
 
-### view organiz you are a member of
+### View organizations Client is a member of
 
 ```https://safe-connected.onrender.com/
   GET /org/mem/
 ```
 
-### view list of all members of an organization
+### List all members of an organization
 
 ```https://safe-connected.onrender.com/
   GET /org/<int:organization_id>/clients/
