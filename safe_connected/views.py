@@ -11,6 +11,9 @@ from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz, IsManagerOrReadOnlyEditOrganiz, IsManagerOnlyClientList
 from django.utils.timezone import now
+import boto3
+from config import settings
+
 # Create an event
 
 
@@ -23,9 +26,78 @@ class EventViewSet(generics.CreateAPIView):
     def perform_create(self, serializer):
         event_organizer = self.request.user
         event_organization_id = event_organizer.organiz_memberships.first().organization_id
-        serializer.save(event_organizer=event_organizer,
-                        event_organization_id=event_organization_id)
+        event_data = serializer.validated_data
+
+        # Set source and target language
+        source_language = 'en'  # English
+        event_language = event_data.get('event_language')
+        target_language = event_language  # Spanish
+
+        translate_client = boto3.client(
+            'translate', region_name=settings.AWS_REGION)
+
+        # Translate event_title
+        event_title_translated = translate_client.translate_text(
+            Text=event_data['event_title'],
+            SourceLanguageCode=source_language,
+            TargetLanguageCode=target_language
+        )['TranslatedText']
+
+        # Translate general_notes
+        general_notes_translated = translate_client.translate_text(
+            Text=event_data['general_notes'],
+            SourceLanguageCode=source_language,
+            TargetLanguageCode=target_language
+        )['TranslatedText']
+
+        # Save the event with translated data
+        serializer.save(
+            event_organizer=event_organizer,
+            event_organization_id=event_organization_id,
+            # Original English title
+            event_title=event_data['event_title'],
+            # Original English notes
+            general_notes=event_data['general_notes'],
+            # event_title_es=event_title_translated,
+            # # Translated notes
+            # general_notes_es=general_notes_translated
+        )
         serializer.instance.email_event_create()
+
+        if event_language == 'es':
+            # Add the translated data to separate fields
+            event_data['event_title_es'] = event_title_translated
+
+            event_data['general_notes_es'] = general_notes_translated
+            setattr(
+                event_data, f"event_title_{target_language}", event_title_translated)
+            # Translated title
+            event_data.event_title_es
+            # event_data.save()
+            serializer.save()
+
+        if event_language == 'fr':
+            event_data['event_title_fr'] = event_title_translated
+
+            event_data['general_notes_fr'] = general_notes_translated
+            setattr(
+                event_data, f"event_title_{target_language}", event_title_translated)
+            # Translated title
+            event_data.event_title_fr
+            # event_data.save()
+            serializer.save()
+
+        if event_language == 'sw':
+            target_language = event_language
+            event_data['event_title_sw'] = event_title_translated
+
+            event_data['general_notes_sw'] = general_notes_translated
+            setattr(
+                event_data, f"event_title_{target_language}", event_title_translated)
+            # Translated title
+            event_data.event_title_sw
+            # event_data.save()
+            serializer.save()
 
 
 # lists all of a clients events
