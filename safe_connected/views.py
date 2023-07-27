@@ -6,10 +6,12 @@ from rest_framework.views import APIView
 from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer, OrgListEventSerializer
-from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer, UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer
+from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
+from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
-from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails, IsManagerOrReadOnlyCreateOrganiz, IsManagerOrReadOnlyEditOrganiz, IsManagerOnlyClientList
+from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails
+from safe_connected.permissions import IsManagerOrReadOnlyCreateOrganiz, IsManagerOrReadOnlyEditOrganiz, IsManagerOnlyClientList
 from django.utils.timezone import now
 import boto3
 from config import settings
@@ -31,7 +33,7 @@ class EventViewSet(generics.CreateAPIView):
         # Set source and target language
         source_language = 'en'  # English
         event_language = event_data.get('event_language')
-        target_language = event_language  # Spanish
+        target_language = event_language
 
         translate_client = boto3.client(
             'translate', region_name=settings.AWS_REGION)
@@ -51,54 +53,36 @@ class EventViewSet(generics.CreateAPIView):
         )['TranslatedText']
 
         # Save the event with translated data
+        translated_fields = {
+            'es': {
+                'event_title_es': event_title_translated,
+                'general_notes_es': general_notes_translated,
+            },
+            'fr': {
+                'event_title_fr': event_title_translated,
+                'general_notes_fr': general_notes_translated,
+            },
+            'sw': {
+                'event_title_sw': event_title_translated,
+                'general_notes_sw': general_notes_translated,
+            }
+        }
+
+        translated_data = translated_fields.get(event_language, {})
+        for field, value in translated_data.items():
+            setattr(event_data, field, value)
+
+        setattr(
+            event_data, f"event_title_{target_language}", event_title_translated)
+
         serializer.save(
             event_organizer=event_organizer,
             event_organization_id=event_organization_id,
-            # Original English title
             event_title=event_data['event_title'],
-            # Original English notes
             general_notes=event_data['general_notes'],
-            # event_title_es=event_title_translated,
-            # # Translated notes
-            # general_notes_es=general_notes_translated
+            **translated_data
         )
         serializer.instance.email_event_create()
-
-        if event_language == 'es':
-            # Add the translated data to separate fields
-            event_data['event_title_es'] = event_title_translated
-
-            event_data['general_notes_es'] = general_notes_translated
-            setattr(
-                event_data, f"event_title_{target_language}", event_title_translated)
-            # Translated title
-            event_data.event_title_es
-            # event_data.save()
-            serializer.save()
-
-        if event_language == 'fr':
-            event_data['event_title_fr'] = event_title_translated
-
-            event_data['general_notes_fr'] = general_notes_translated
-            setattr(
-                event_data, f"event_title_{target_language}", event_title_translated)
-            # Translated title
-            event_data.event_title_fr
-            # event_data.save()
-            serializer.save()
-
-        if event_language == 'sw':
-            target_language = event_language
-            event_data['event_title_sw'] = event_title_translated
-
-            event_data['general_notes_sw'] = general_notes_translated
-            setattr(
-                event_data, f"event_title_{target_language}", event_title_translated)
-            # Translated title
-            event_data.event_title_sw
-            # event_data.save()
-            serializer.save()
-
 
 # lists all of a clients events
 
