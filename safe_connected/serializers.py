@@ -14,7 +14,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'username', 'role', 'password',
-                  'id', 'first_name', 'last_name', 'full_name')
+                  'id', 'first_name', 'last_name', 'full_name', 'language')
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
@@ -24,7 +24,8 @@ class UserSerializer(UserSerializer):
 
     class Meta(UserSerializer.Meta):
         model = User
-        fields = ('email', 'username', 'role', 'id', 'first_name', 'last_name')
+        fields = ('email', 'username', 'role', 'id',
+                  'first_name', 'last_name', 'language')
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -37,7 +38,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('id', 'event_title', 'general_notes', 'event_date',
-                  'start_time', 'end_time', 'event_type', 'number_attending', 'event_language', 'street_number', 'street_name', 'city', 'state', 'zipcode', 'privacy', 'max_attendees', 'full_address')
+                  'start_time', 'end_time', 'event_type', 'number_attending', 'street_number', 'street_name', 'city', 'state', 'zipcode', 'privacy', 'max_attendees', 'full_address')
 
     def get_full_address(self, obj):
         return f"{obj.street_number} {obj.street_name} {obj.city}, {obj.state} {obj.zipcode}"
@@ -145,4 +146,10 @@ class FileUploadSerializer(serializers.ModelSerializer):
 class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrganizationMembership
+        fields = '__all__'
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    class Meta:
+        model = User
         fields = '__all__'

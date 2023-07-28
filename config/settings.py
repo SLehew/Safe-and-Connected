@@ -196,12 +196,22 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
-
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+    'SET_PASSWORD_RETYPE': True,
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_CONFIRMED': True,
+    'PASSWORD_RESET_SHOW_EMAIL_INVALID': True,
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
     'SERIALIZERS': {
         'user_create': 'safe_connected.serializers.UserRegistrationSerializer',
         'current_user': 'safe_connected.serializers.UserSerializer'
-    }
-
+    },
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'SEND_CONFIRMATION_EMAIL': False,
+    'LOGIN_FIELD': 'username',
+    'USER_CREATE_PASSWORD_VALIDATORS': None,
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

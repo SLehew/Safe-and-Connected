@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, permissions, filters, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -7,7 +7,7 @@ from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer, OrgListEventSerializer
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
-from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer
+from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer, CustomUserCreateSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails
@@ -27,62 +27,51 @@ class EventViewSet(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         event_organizer = self.request.user
-        event_organization_id = event_organizer.organiz_memberships.first().organization_id
+        event_organization_id = (
+            event_organizer.organiz_memberships.first().organization_id
+        )
         event_data = serializer.validated_data
-
-        # Set source and target language
-        source_language = 'en'  # English
-        event_language = event_data.get('event_language')
-        target_language = event_language
-
-        translate_client = boto3.client(
-            'translate', region_name=settings.AWS_REGION)
-
-        # Translate event_title
-        event_title_translated = translate_client.translate_text(
-            Text=event_data['event_title'],
-            SourceLanguageCode=source_language,
-            TargetLanguageCode=target_language
-        )['TranslatedText']
-
-        # Translate general_notes
-        general_notes_translated = translate_client.translate_text(
-            Text=event_data['general_notes'],
-            SourceLanguageCode=source_language,
-            TargetLanguageCode=target_language
-        )['TranslatedText']
-
-        # Save the event with translated data
-        translated_fields = {
-            'es': {
-                'event_title_es': event_title_translated,
-                'general_notes_es': general_notes_translated,
-            },
-            'fr': {
-                'event_title_fr': event_title_translated,
-                'general_notes_fr': general_notes_translated,
-            },
-            'sw': {
-                'event_title_sw': event_title_translated,
-                'general_notes_sw': general_notes_translated,
-            }
-        }
-
-        translated_data = translated_fields.get(event_language, {})
-        for field, value in translated_data.items():
-            setattr(event_data, field, value)
-
-        setattr(
-            event_data, f"event_title_{target_language}", event_title_translated)
-
-        serializer.save(
+        event_obj = serializer.save(
             event_organizer=event_organizer,
             event_organization_id=event_organization_id,
-            event_title=event_data['event_title'],
-            general_notes=event_data['general_notes'],
-            **translated_data
+            event_title=event_data["event_title"],
+            general_notes=event_data["general_notes"],
         )
+        # Set source and target language
+        source_language = "en"  # English
+        target_languages = User.LANGUAGE_CHOICES
+
+        translate_client = boto3.client(
+            "translate", region_name=settings.AWS_REGION)
+
+        # for each of the target langs, translate the event title and general notes
+        translations = {}
+        for target_language in [lang[0] for lang in target_languages]:
+            event_title_translated = translate_client.translate_text(
+                Text=event_data["event_title"],
+                SourceLanguageCode=source_language,
+                TargetLanguageCode=target_language,
+            )["TranslatedText"]
+
+            translations[target_language] = event_title_translated
+            setattr(
+                event_obj, f"event_title_{target_language}", event_title_translated)
+
+        for target_language in [lang[0] for lang in target_languages]:
+            general_notes_translated = translate_client.translate_text(
+                Text=event_data["general_notes"],
+                SourceLanguageCode=source_language,
+                TargetLanguageCode=target_language,
+            )["TranslatedText"]
+
+            translations[target_language] = general_notes_translated
+            setattr(
+                event_obj, f"general_notes_{target_language}", general_notes_translated)
+
+        event_obj.save()
         serializer.instance.email_event_create()
+
+        return event_obj
 
 # lists all of a clients events
 
@@ -356,3 +345,17 @@ class UserRoleView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class BulkUserCreateView(generics.CreateAPIView):
+    serializer_class = CustomUserCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        emails = request.data.get('emails', [])
+        users_data = [{'email': email, 'password': None} for email in emails]
+
+        serializer = self.get_serializer(data=users_data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

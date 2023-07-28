@@ -53,27 +53,6 @@ https://safe-connected.onrender.com/
 | `event_type`        | `int`    |                                   |
 | `event_organization`| `int`    |                                   |
 
-#### Manager Edit Event
-
-```https://safe-connected.onrender.com/
-  PATCH event/<int:pk>/details/
-```
-
-| Parameter           | Type     | Description                       |
-| :--------           | :------- | :-------------------------------- |
-|`event_title`        | `str`    |                                   |
-| `general_notes`     | `str`    |                                   |
-| `event_date`        | `date`   |        `YYYY-MM-DD `              |
-| `start_time`        | `time`   |        `HH:MM:SS`                 |
-| `end_time`          | `time`   |        `HH:MM:SS`                 |
-| `event_type`        | `int`    |                                   |
-| `event_language`    | `int`    |                                   |
-| `street_number`     | `int`    |                                   |
-| `street_name`       | `str`    |                                   |
-| `city`              | `str`    |                                   |
-| `state`             | `str`    |                                   |
-| `zipcode`           | `int`    |                                   |
-| `privacy`           | `bool`   |                                   |
 
 ### List All Events
 
@@ -81,10 +60,25 @@ https://safe-connected.onrender.com/
   GET /event/all/
 ```
 ### List All Clients Available Events
+Lanuage Codes
+Spanish = `es`
+French = `fr`
+Swahili = `sw`
 
 ```https://safe-connected.onrender.com/
-  GET /event/all/
+  GET <language_code>/event/all/
 ```
+#### Event Details
+Lanuage Codes
+Spanish = `es`
+French = `fr`
+Swahili = `sw`
+
+```https://safe-connected.onrender.com/
+  GET <language_code>/event/<int:pk>/details/
+```
+
+
 ### List All of an Organizations Events
 
 ```https://safe-connected.onrender.com/
