@@ -145,6 +145,7 @@ class Event(models.Model):
     max_attendees = models.IntegerField(blank=True, null=True)
     event_attendees = models.ManyToManyField(
         User, related_name='attended_events', blank=True)
+    event_published = models.BooleanField(default=False)
 
     def email_event_create(self):
 
