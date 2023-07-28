@@ -25,7 +25,7 @@ urlpatterns = [
     path("event/<int:pk>/details/",
          views.EventDetailViewSet.as_view(), name="event-detail"),
     # GET | Event Details in Spanish
-    path("es/event/<int:pk>/details/",
+    path("d2e07b2de5073f9540960eeb0b8a7f2d687ac244",
          views.EventDetailViewSet.as_view(), name="event-detail"),
     # GET | Event Details in French
     path("fr/event/<int:pk>/details/",
