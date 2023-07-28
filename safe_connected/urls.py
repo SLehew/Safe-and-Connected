@@ -9,9 +9,30 @@ urlpatterns = [
     # GET | List All Events Created by the Manager
     path("event/organizer/list/",
          views.EventListViewSet.as_view(), name="list-event"),
-    # GET | List All Events for Clients Organizations
+    # GET | List All Events for Clients Organizations in English
     path("client/event/list/", views.EventHomeClientViewSet.as_view(),
-         name="client-list-event"),
+         name="client-list-event-"),
+    # GET | List All Events for Clients Organizations in Spanish
+    path("es/client/event/list/", views.EventHomeClientViewSet.as_view(),
+         name="client-list-event-es"),
+    # GET | List All Events for Clients Organizations in French
+    path("fr/client/event/list/", views.EventHomeClientViewSet.as_view(),
+         name="client-list-event-fr"),
+    # GET | List All Events for Clients Organizations in Swahili
+    path("sw/client/event/list/", views.EventHomeClientViewSet.as_view(),
+         name="client-list-event-sw"),
+    # GET | Event Details in English
+    path("event/<int:pk>/details/",
+         views.EventDetailViewSet.as_view(), name="event-detail"),
+    # GET | Event Details in Spanish
+    path("es/event/<int:pk>/details/",
+         views.EventDetailViewSet.as_view(), name="event-detail"),
+    # GET | Event Details in French
+    path("fr/event/<int:pk>/details/",
+         views.EventDetailViewSet.as_view(), name="event-detail"),
+    # GET | Event Details in Swahili
+    path("sw/event/<int:pk>/details/",
+         views.EventDetailViewSet.as_view(), name="event-detail"),
     # PATCH|UPDATE|DELETE | Manager Edit Event
     path("event/<int:pk>/details/",
          views.EventDetailViewSet.as_view(), name="event-detail"),
@@ -55,4 +76,6 @@ urlpatterns = [
     # GET | List All Org Clients
     path("org/<int:organization_id>/clients/",
          views.ClientListView.as_view(), name="org-clients"),
+    # POST
+    path("bulk-create/", views.BulkUserCreateView.as_view(), name="bulk-user-create")
 ]

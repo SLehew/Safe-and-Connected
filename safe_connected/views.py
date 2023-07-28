@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, permissions, filters, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -7,7 +7,7 @@ from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer, OrgListEventSerializer
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
-from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer
+from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer, CustomUserCreateSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails
@@ -49,7 +49,7 @@ class EventViewSet(generics.CreateAPIView):
         general_notes_translated = translate_client.translate_text(
             Text=event_data['general_notes'],
             SourceLanguageCode=source_language,
-            TargetLanguageCode=target_language
+            TargetLanguageCode="target_language"
         )['TranslatedText']
 
         # Save the event with translated data
@@ -356,3 +356,17 @@ class UserRoleView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class BulkUserCreateView(generics.CreateAPIView):
+    serializer_class = CustomUserCreateSerializer
+
+    def create(self, request, *args, **kwargs):
+        emails = request.data.get('emails', [])
+        users_data = [{'email': email, 'password': None} for email in emails]
+
+        serializer = self.get_serializer(data=users_data, many=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
