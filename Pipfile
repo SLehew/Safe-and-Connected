@@ -22,6 +22,7 @@ djangorestframework-simplejwt = "*"
 django-address = "*"
 django-extensions = "*"
 django-modeltranslation = "*"
+pillow = "*"
 
 [dev-packages]
 

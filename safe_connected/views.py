@@ -7,7 +7,7 @@ from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer, OrgListEventSerializer
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
-from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer
+from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer, ImageUploadSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails
@@ -293,6 +293,12 @@ class UploadCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
+class ImageCreateView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = ImageUploadSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
 class FileViewSet(generics.ListCreateAPIView):
     queryset = FileUpload.objects.all()
     serializer_class = FileUploadSerializer
@@ -335,6 +341,12 @@ class ClientListView(generics.ListAPIView):
 
 
 class UserRoleView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class UploadUserAvatarView(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
