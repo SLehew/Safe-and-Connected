@@ -7,7 +7,7 @@ from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
 from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer, OrgListEventSerializer
 from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
-from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer, CustomUserCreateSerializer
+from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
 from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails
@@ -130,11 +130,6 @@ class OrgEventListViewSet(generics.ListCreateAPIView):
             raise PermissionDenied('You are not allowed to do this')
         else:
             return Event.objects.filter(event_organization__id=org_id)
-
-    # def get_queryset(self):
-    #     org_id = self.kwargs['organization_id']
-
-    #     return Event.objects.filter(event_organization__id=org_id)
 
 
 class EventDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
@@ -268,17 +263,6 @@ class OrganizationMembershipViewSet(generics.CreateAPIView):
         serializer.save()
 
 
-# class OrganizationClientViewSet(generics.ListAPIView):
-#     queryset = OrganizationMembership.objects.all()
-#     serializer_class = OrganizationMembershipSerializer
-
-#     permission_classes = [permissions.IsAuthenticated]
-
-#     def organization_clients(self, organization):
-
-#         members = OrganizationMembership.objects.filter(organization)
-
-
 class ClientLanguageMembershipViewSet(generics.CreateAPIView):
     queryset = ClientLanguageMembership.objects.all()
     serializer_class = ClientLanguageMembershipSerializer
@@ -307,6 +291,15 @@ class UploadCreateView(generics.CreateAPIView):
     queryset = FileUpload.objects.all()
     serializer_class = FileUploadSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class FileViewSet(generics.ListCreateAPIView):
+    queryset = FileUpload.objects.all()
+    serializer_class = FileUploadSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return self.queryset.filter(client_profile=self.request.user)
 
 
 class MembershipView(generics.ListAPIView):
@@ -345,17 +338,3 @@ class UserRoleView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-
-class BulkUserCreateView(generics.CreateAPIView):
-    serializer_class = CustomUserCreateSerializer
-
-    def create(self, request, *args, **kwargs):
-        emails = request.data.get('emails', [])
-        users_data = [{'email': email, 'password': None} for email in emails]
-
-        serializer = self.get_serializer(data=users_data, many=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)

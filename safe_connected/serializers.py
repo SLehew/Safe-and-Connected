@@ -147,9 +147,3 @@ class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrganizationMembership
         fields = '__all__'
-
-
-class CustomUserCreateSerializer(UserCreateSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'

@@ -32,6 +32,7 @@ class User(AbstractUser):
         max_length=10, choices=ROLE_CHOICES, null=False, blank=False, default="Client")
     language = models.CharField(
         max_length=5, choices=LANGUAGE_CHOICES, null=False, blank=False, default="en")
+    user_avatar = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.username
@@ -68,6 +69,7 @@ class OrganizationProfile(models.Model):
     zipcode = models.CharField(max_length=25, default='27514')
     phone = PhoneNumberField(blank=True, null=True)
     org_notes = models.TextField(blank=True, null=True)
+    org_avatar = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.org_name
@@ -145,6 +147,7 @@ class Event(models.Model):
     max_attendees = models.IntegerField(blank=True, null=True)
     event_attendees = models.ManyToManyField(
         User, related_name='attended_events', blank=True)
+    event_avatar = models.URLField(null=True, blank=True)
 
     def email_event_create(self):
 
@@ -201,7 +204,7 @@ class EventRoster(models.Model):
 
 class FileUpload(models.Model):
     client_profile = models.ForeignKey(
-        to=ClientProfile, on_delete=models.CASCADE, blank=True, null=True)
+        to=User, on_delete=models.CASCADE, blank=True, null=True)
     organization_profile = models.ForeignKey(
         to=OrganizationProfile, on_delete=models.CASCADE, blank=True, null=True)
     event = models.ForeignKey(
