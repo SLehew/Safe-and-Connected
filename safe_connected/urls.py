@@ -68,6 +68,8 @@ urlpatterns = [
          name="create-organiz-client-membership"),
     # POST | Upload File
     path("uploads/", views.UploadCreateView.as_view()),
+    #GET | Get List of Client Files
+    path("files/user/<int:pk>/", views.FileViewSet.as_view()),
     # GET | List of all Org Client is Member Of
     path("org/mem/",
          views.MembershipView.as_view(), name="my-memberships"),
@@ -76,6 +78,4 @@ urlpatterns = [
     # GET | List All Org Clients
     path("org/<int:organization_id>/clients/",
          views.ClientListView.as_view(), name="org-clients"),
-    # POST
-    path("bulk-create/", views.BulkUserCreateView.as_view(), name="bulk-user-create")
 ]
