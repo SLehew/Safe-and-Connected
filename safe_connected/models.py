@@ -32,7 +32,7 @@ class User(AbstractUser):
         max_length=10, choices=ROLE_CHOICES, null=False, blank=False, default="Client")
     language = models.CharField(
         max_length=5, choices=LANGUAGE_CHOICES, null=False, blank=False, default="en")
-    user_avatar = models.URLField(null=True, blank=True)
+    user_avatar = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.username
@@ -69,7 +69,7 @@ class OrganizationProfile(models.Model):
     zipcode = models.CharField(max_length=25, default='27514')
     phone = PhoneNumberField(blank=True, null=True)
     org_notes = models.TextField(blank=True, null=True)
-    org_avatar = models.URLField(null=True, blank=True)
+    org_avatar = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.org_name
@@ -148,7 +148,7 @@ class Event(models.Model):
     event_attendees = models.ManyToManyField(
         User, related_name='attended_events', blank=True)
     event_published = models.BooleanField(default=False)
-    event_avatar = models.URLField(null=True, blank=True)
+    event_avatar = models.ImageField(null=True, blank=True)
 
     def email_event_create(self):
 

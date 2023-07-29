@@ -68,7 +68,7 @@ urlpatterns = [
          name="create-organiz-client-membership"),
     # POST | Upload File
     path("uploads/", views.UploadCreateView.as_view()),
-    #GET | Get List of Client Files
+    # GET | Get List of Client Files
     path("files/user/<int:pk>/", views.FileViewSet.as_view()),
     # GET | List of all Org Client is Member Of
     path("org/mem/",
@@ -78,4 +78,7 @@ urlpatterns = [
     # GET | List All Org Clients
     path("org/<int:organization_id>/clients/",
          views.ClientListView.as_view(), name="org-clients"),
+    # POST | Upload File
+    path("user/<int:pk>/image/",
+         views.UploadUserAvatarView.as_view(), name="user-avatar"),
 ]
