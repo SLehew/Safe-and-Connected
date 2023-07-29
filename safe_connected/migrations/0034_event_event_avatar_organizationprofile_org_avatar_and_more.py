@@ -25,4 +25,9 @@ class Migration(migrations.Migration):
             name='user_avatar',
             field=models.URLField(blank=True, null=True),
         ),
+        migrations.AddField(
+            model_name='event',
+            name='event_published',
+            field=models.BooleanField(default=False),
+        ),
     ]

@@ -193,6 +193,12 @@ Swahili = `sw`
 | :--------        | :------- | :-------------------------------- |
 |`file`            |`file`    |                                   |
 
+### Get List of Users Files
+
+```https://safe-connected.onrender.com/
+  GET /files/user/<int:pk>/
+```
+
 ### View organizations Client is a member of
 
 ```https://safe-connected.onrender.com/
