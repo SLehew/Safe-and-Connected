@@ -86,7 +86,7 @@ class EventHomeClientViewSet(generics.ListAPIView):
 
         today = now().date()
 
-        queryset = Event.objects.filter(event_date__gte=today) | Event.objects.filter(
+        queryset = Event.objects.filter(event_date__gte=today).filter(event_published=True) | Event.objects.filter(
             event_date__isnull=True)
         queryset = queryset.order_by('event_date')
 

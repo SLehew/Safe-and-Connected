@@ -38,7 +38,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('id', 'event_title', 'general_notes', 'event_date',
-                  'start_time', 'end_time', 'event_type', 'number_attending', 'street_number', 'street_name', 'city', 'state', 'zipcode', 'privacy', 'max_attendees', 'full_address')
+                  'start_time', 'end_time', 'event_type', 'number_attending', 'street_number', 'street_name', 'city', 'state', 'zipcode', 'privacy', 'max_attendees', 'full_address', 'event_published')
 
     def get_full_address(self, obj):
         return f"{obj.street_number} {obj.street_name} {obj.city}, {obj.state} {obj.zipcode}"
