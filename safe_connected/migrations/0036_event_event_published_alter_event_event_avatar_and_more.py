@@ -10,11 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='event',
-            name='event_published',
-            field=models.BooleanField(default=False),
-        ),
         migrations.AlterField(
             model_name='event',
             name='event_avatar',
