@@ -40,6 +40,16 @@ https://safe-connected.onrender.com/
 ```https://safe-connected.onrender.com/
   POST /auth/token/logout/
 ```
+#### Upload User Avatar
+
+```https://safe-connected.onrender.com/
+  POST user/<int:pk>/image/
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `email`   |`str`     |                                   |
+
 #### Create Event
 
 ```https://safe-connected.onrender.com/
