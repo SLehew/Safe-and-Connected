@@ -24,7 +24,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
-    
+
     def create(self, validated_data):
 
         uploaded_image = validated_data.get('file')
@@ -72,7 +72,7 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('id', 'event_title', 'general_notes', 'event_date',
-                  'start_time', 'end_time', 'event_type', 'number_attending', 'street_number', 'street_name', 'city', 'state', 'zipcode', 'privacy', 'max_attendees', 'full_address', 'event_published')
+                  'start_time', 'end_time', 'event_type', 'number_attending', 'street_number', 'street_name', 'city', 'state', 'zipcode', 'privacy', 'max_attendees', 'full_address')
 
     def get_full_address(self, obj):
         return f"{obj.street_number} {obj.street_name} {obj.city}, {obj.state} {obj.zipcode}"
