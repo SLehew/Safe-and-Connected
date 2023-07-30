@@ -49,6 +49,9 @@ urlpatterns = [
     # PATCH | Client Sign Up for Event (pk is event_id)
     path("event/roster/<int:pk>/signup/",
          views.EventRosterUpdateViewSet.as_view(), name="event-roster"),
+    # GET List of the Events Client is Attending
+    path("event/client/", views.ClientEventAttending.as_view(),
+         name="client-events-attending"),
     # POST | Create Organization Profile
     path("organization/create/",
          views.OrganizationProfileViewSet.as_view(), name="create-org"),
