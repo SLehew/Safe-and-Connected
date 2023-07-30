@@ -193,6 +193,16 @@ class EventRosterViewSet(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
+class ClientEventAttending(generics.ListAPIView):
+    serializer_class = EventSerializer
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Event.objects.filter(event_attendees=user)
+
+
 class EventRosterUpdateViewSet(generics.UpdateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventRosterSerializer
