@@ -76,7 +76,7 @@ urlpatterns = [
     # GET | List of all Org Client is Member Of
     path("org/mem/",
          views.MembershipView.as_view(), name="my-memberships"),
-    # GET | View User Role
+    # GET and PATCH | View and edit User Role
     path("user/<int:pk>/", views.UserRoleView.as_view(), name="user_role"),
     # GET | List All Org Clients
     path("org/<int:organization_id>/clients/",
