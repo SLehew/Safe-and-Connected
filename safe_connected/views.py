@@ -206,15 +206,21 @@ class ClientEventAttending(generics.ListAPIView):
 class EventRosterUpdateViewSet(generics.UpdateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventRosterSerializer
-
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_update(self, serializer):
         event_instance = serializer.instance
-        event_instance.event_attendees.add(
-            self.request.user)
-        event_instance.email_event_signup(self.request.user)
-        serializer.save()
+        user = self.request.user
+
+        if event_instance.event_attendees.filter(id=user.id).exists():
+            event_instance.event_attendees.remove(user)
+            serializer.save()
+            return Response({"detail": "You have been removed from the attendees list."}, status=status.HTTP_200_OK)
+        else:
+            event_instance.event_attendees.add(user)
+            serializer.save()
+            event_instance.email_event_signup(user)
+            return Response({"detail": "You have been added to the attendees list."}, status=status.HTTP_200_OK)
 
 
 class LanguageViewSet(generics.CreateAPIView):
