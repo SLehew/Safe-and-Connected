@@ -124,9 +124,9 @@ class OrgEventListViewSet(generics.ListCreateAPIView):
 
     def get_queryset(self):
         org_id = self.kwargs['event_organization_id']
-        user_in_organiz = Event.objects.filter(
-            event_organizer=self.request.user, event_organization__id=org_id).exists()
-        if not user_in_organiz:
+        user_in_org = OrganizationMembership.objects.filter(
+            member=self.request.user, organization__id=org_id).exists()
+        if not user_in_org:
             raise PermissionDenied('You are not allowed to do this')
         else:
             return Event.objects.filter(event_organization__id=org_id)
@@ -354,7 +354,7 @@ class ClientListView(generics.ListAPIView):
             return OrganizationMembership.objects.filter(organization__id=org_id)
 
 
-class UserRoleView(generics.RetrieveAPIView):
+class UserRoleView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
