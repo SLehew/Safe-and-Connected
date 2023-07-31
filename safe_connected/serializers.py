@@ -55,7 +55,7 @@ class UserSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         model = User
         fields = ('email', 'username', 'role', 'id',
-                  'first_name', 'last_name', 'language')
+                  'first_name', 'last_name', 'language', 'user_avatar')
 
 
 class EventSerializer(serializers.ModelSerializer):
