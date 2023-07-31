@@ -174,6 +174,7 @@ class FileUploadSerializer(serializers.ModelSerializer):
 
 class MembershipSerializer(serializers.ModelSerializer):
     member_full_name = serializers.SerializerMethodField()
+    user_avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = OrganizationMembership
@@ -182,6 +183,9 @@ class MembershipSerializer(serializers.ModelSerializer):
     # Method to get the member's full name
     def get_member_full_name(self, obj):
         return obj.member.get_full_name()
+
+    def get_user_avatar(self, obj):
+        return obj.member.get_user_avatar()
 
 
 class ImageUploadSerializer(serializers.ModelSerializer):

@@ -41,6 +41,11 @@ class User(AbstractUser):
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
 
+    def get_user_avatar(self):
+        if self.user_avatar:
+            return self.user_avatar.url
+        return None
+
 # Lang model is a table of all the languages used by organizations and clients
 
 
