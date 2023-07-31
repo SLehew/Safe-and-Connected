@@ -25,7 +25,7 @@ urlpatterns = [
     path("event/<int:pk>/details/",
          views.EventDetailViewSet.as_view(), name="event-detail"),
     # GET | Event Details in Spanish
-    path("d2e07b2de5073f9540960eeb0b8a7f2d687ac244",
+    path("es/event/<int:pk>/details/",
          views.EventDetailViewSet.as_view(), name="event-detail"),
     # GET | Event Details in French
     path("fr/event/<int:pk>/details/",
@@ -64,8 +64,6 @@ urlpatterns = [
     # GET|UPDATE|DELETE | Edit Organization profile
     path("organization/edit/<int:pk>/",
          views.EditOrganizationProfileViewSet.as_view(), name="org-edit"),
-    # POST | Add Language
-    path("language/add/", views.LanguageViewSet.as_view(), name="add-language"),
     # POST | Add Client to Org Membership
     path("org/client/mem/create/", views.OrganizationMembershipViewSet.as_view(),
          name="create-organiz-client-membership"),

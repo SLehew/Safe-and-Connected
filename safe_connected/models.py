@@ -5,6 +5,8 @@ from django.core.mail import send_mail, EmailMessage
 from config import settings
 from datetime import date, time
 
+# User model, Language sets preferred translation for user when viewing events.
+
 
 class User(AbstractUser):
 
@@ -49,26 +51,6 @@ class User(AbstractUser):
 # Lang model is a table of all the languages used by organizations and clients
 
 
-class Lang(models.Model):
-    lang = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.lang
-
-
-class ClientProfile(models.Model):
-
-    client_zipcode = models.IntegerField(default=27514)
-    client_children = models.BooleanField(default=False)
-    client_notes = models.TextField(blank=True)
-    client_phone = PhoneNumberField(blank=True)
-    client = models.ForeignKey(
-        to=User, on_delete=models.CASCADE, default=1)
-
-    def __str__(self):
-        return self.client.username
-
-
 class OrganizationProfile(models.Model):
     org_name = models.CharField(max_length=250)
     street_number = models.CharField(max_length=50, blank=True, null=True)
@@ -94,37 +76,6 @@ class OrganizationMembership(models.Model):
 
     def __str__(self):
         return f"{self.organization.org_name} {self.member}"
-
-
-class ManagerOrgMembership(models.Model):
-    manager = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    organization = models.ForeignKey(
-        to=OrganizationProfile, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.organization.org_name
-
-# Identifies which languages a client speaks.
-
-
-class ClientLanguageMembership(models.Model):
-    client = models.ForeignKey(to=ClientProfile, on_delete=models.CASCADE)
-    client_language = models.ForeignKey(to=Lang, on_delete=models.CASCADE)
-    is_manager = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.client} {self.client_language}"
-
-# Identifies which languages an organizations services.
-
-
-class OrgLanguageMembership(models.Model):
-    organization = models.ForeignKey(
-        to=OrganizationProfile, on_delete=models.CASCADE)
-    org_language = models.ForeignKey(to=Lang, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"{self.organization.org_name} {self.org_language}"
 
 
 class EventType(models.Model):
