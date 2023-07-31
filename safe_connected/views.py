@@ -348,7 +348,7 @@ class ClientListView(generics.ListAPIView):
             return OrganizationMembership.objects.filter(organization__id=org_id)
 
 
-class UserRoleView(generics.RetrieveAPIView):
+class UserRoleView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
