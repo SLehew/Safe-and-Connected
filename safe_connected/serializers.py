@@ -2,16 +2,12 @@ from rest_framework import serializers
 from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile
 from .models import OrganizationMembership, ClientLanguageMembership, ManagerOrgMembership
 from .models import OrgLanguageMembership, EventType, FileUpload, User
-from djoser.serializers import UserCreateSerializer, UserSerializer
-from django.contrib.auth import get_user_model
+from djoser.serializers import UserSerializer
 from PIL import Image
 from io import BytesIO
 import boto3
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from config import settings
-
-
-User = get_user_model()
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
