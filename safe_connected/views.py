@@ -347,8 +347,6 @@ class ClientListView(generics.ListAPIView):
         else:
             return OrganizationMembership.objects.filter(organization__id=org_id)
 
-        # return OrganizationMembership.objects.filter(organization__id=org_id)
-
 
 class UserRoleView(generics.RetrieveAPIView):
     queryset = User.objects.all()
