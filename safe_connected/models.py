@@ -29,10 +29,11 @@ class User(AbstractUser):
     ]
 
     role = models.CharField(
-        max_length=10, choices=ROLE_CHOICES, null=False, blank=False, default="Client")
+        max_length=10, choices=ROLE_CHOICES)
     language = models.CharField(
-        max_length=5, choices=LANGUAGE_CHOICES, null=False, blank=False, default="en")
-    user_avatar = models.ImageField(null=True, blank=True)
+        max_length=5, choices=LANGUAGE_CHOICES)
+    user_avatar = models.ImageField(
+        upload_to="uploads/", null=True, blank=True)
 
     def __str__(self):
         return self.username

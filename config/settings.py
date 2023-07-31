@@ -208,8 +208,8 @@ DJOSER = {
         'user_create': 'safe_connected.serializers.UserRegistrationSerializer',
         'current_user': 'safe_connected.serializers.UserSerializer'
     },
-    'USER_CREATE_PASSWORD_RETYPE': True,
-    'SEND_CONFIRMATION_EMAIL': False,
+    'USER_CREATE_PASSWORD_RETYPE': False,
+    'SEND_CONFIRMATION_EMAIL': True,
     'LOGIN_FIELD': 'username',
     'USER_CREATE_PASSWORD_VALIDATORS': None,
 }
