@@ -183,7 +183,10 @@ AUTH_USER_MODEL = 'safe_connected.User'
 
 CORS_ALLOWED_ORIGINS = [
     "https://safeandconnected.netlify.app",
+    "https://safe-connected.onrender.com"
     "http://127.0.0.1:8000",
+    "http://localhost:5173",
+
 ]
 
 
