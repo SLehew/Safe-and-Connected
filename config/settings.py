@@ -142,7 +142,7 @@ LOCALE_PATHS = [
 MODELTRANSLATION_DEFAULT_LANGUAGES = 'en'
 MODELTRANSLATION_LANGUAGES = ('en-us', 'es', 'fr', 'sw')
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
