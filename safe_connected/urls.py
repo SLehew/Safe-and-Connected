@@ -80,6 +80,6 @@ urlpatterns = [
     path("org/<int:organization_id>/clients/",
          views.ClientListView.as_view(), name="org-clients"),
     # POST | Upload User Avatar
-    path("user/<int:pk>/image/",
-         views.UploadUserAvatarView.as_view(), name="user-avatar"),
+    #     path("user/<int:pk>/image/",
+    #          views.UploadUserAvatarView.as_view(), name="user-avatar"),
 ]

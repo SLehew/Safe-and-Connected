@@ -1,6 +1,8 @@
 from rest_framework import permissions
 
 
+# permission to allow only managers to create an event
+
 class IsManagerOrReadOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):
@@ -14,6 +16,8 @@ class IsManagerOrReadOnly(permissions.BasePermission):
         return False
 
 
+# permission to allow only managers to edit event details
+
 class IsManagerOrReadOnlyEventDetails(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -22,6 +26,8 @@ class IsManagerOrReadOnlyEventDetails(permissions.BasePermission):
             return True
         return False
 
+
+# permission to allow only managers to create an organization
 
 class IsManagerOrReadOnlyCreateOrganiz(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -32,6 +38,8 @@ class IsManagerOrReadOnlyCreateOrganiz(permissions.BasePermission):
         return False
 
 
+# permission to allow only managers to edit organization details
+
 class IsManagerOrReadOnlyEditOrganiz(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -40,6 +48,8 @@ class IsManagerOrReadOnlyEditOrganiz(permissions.BasePermission):
             return True
         return False
 
+
+# permission to allow only managers to view clients list for their organiz
 
 class IsManagerOnlyClientList(permissions.BasePermission):
     def has_permission(self, request, view):
