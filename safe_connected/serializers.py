@@ -26,7 +26,7 @@ class UserRegistrationSerializer(UserCreateSerializer):
         uploaded_image = validated_data.get('file')
 
         if uploaded_image:
-            # Process the image using Pillow (optional)
+            # Process the image using Pillow
             image = Image.open(uploaded_image)
             # Prepare the image to be saved to AWS S3
             buffer = BytesIO()
