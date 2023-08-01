@@ -137,6 +137,20 @@ class Event(models.Model):
 
         )
 
+    def email_event_remove_signup(self, user):
+
+        email_to = [user.email]
+
+        send_mail(
+            subject=(f'{self.event_title} on {self.start_time}'),
+            message=(
+                f'{user.first_name}, you have cancelled your sign up to attend {self.event_title}, on {self.event_date} from {self.start_time} to {self.end_time}.'),
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=email_to,
+            fail_silently=False
+
+        )
+
     def email_event_edit(self):
 
         email = EmailMessage(

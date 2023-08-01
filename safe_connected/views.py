@@ -205,6 +205,7 @@ class EventRosterUpdateViewSet(generics.UpdateAPIView):
         if event_instance.event_attendees.filter(id=user.id).exists():
             event_instance.event_attendees.remove(user)
             serializer.save()
+            event_instance.email_event_remove_signup(user)
             return Response({"detail": "You have been removed from the attendees list."}, status=status.HTTP_200_OK)
         else:
             event_instance.event_attendees.add(user)
