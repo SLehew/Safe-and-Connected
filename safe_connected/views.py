@@ -4,7 +4,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import EventSerializer, EventRosterSerializer
-from .serializers import  OrganizationProfileSerializer, MembershipSerializer
+from .serializers import OrganizationProfileSerializer, MembershipSerializer
 from .serializers import OrganizationMembershipSerializer, OrgListEventSerializer
 from .serializers import EventTypeSerializers, FileUploadSerializer
 from .serializers import UserRegistrationSerializer, EventRosterNameSerializer, ImageUploadSerializer
@@ -16,8 +16,8 @@ from django.utils.timezone import now
 import boto3
 from config import settings
 
-# Create an event
 
+# Create an event
 
 class EventViewSet(generics.CreateAPIView):
     queryset = Event.objects.all()
@@ -73,8 +73,8 @@ class EventViewSet(generics.CreateAPIView):
 
         return event_obj
 
-# lists all of a clients events
 
+# lists all of a clients events
 
 class EventHomeClientViewSet(generics.ListAPIView):
     serializer_class = EventSerializer
@@ -92,8 +92,8 @@ class EventHomeClientViewSet(generics.ListAPIView):
 
         return queryset
 
-# List events by organizer, organization, language, or event type.
 
+# List events by organizer, organization, language, or event type.
 
 class EventListViewSet(generics.ListCreateAPIView):
     queryset = Event.objects.all()
@@ -115,11 +115,15 @@ class EventListViewSet(generics.ListCreateAPIView):
         serializer.save(event_organizer=self.request.user)
 
 
+# List events by organization
+
 class OrgEventListViewSet(generics.ListCreateAPIView):
     queryset = Event.objects.all()
     serializer_class = OrgListEventSerializer
 
     permission_classes = [permissions.IsAuthenticated]
+
+    # managers can only see list of events associated with their organization
 
     def get_queryset(self):
         org_id = self.kwargs['event_organization_id']
@@ -130,6 +134,8 @@ class OrgEventListViewSet(generics.ListCreateAPIView):
         else:
             return Event.objects.filter(event_organization__id=org_id)
 
+
+# Edit event details
 
 class EventDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = Event.objects.all()
@@ -164,12 +170,16 @@ class EventSearchViewSet(APIView):
         return Response(serializer.data)
 
 
+# list of clients attending a specific event
+
 class EventRosterViewSet(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventRosterNameSerializer
 
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+
+# list of events a client is attending
 
 class ClientEventAttending(generics.ListAPIView):
     serializer_class = EventSerializer
@@ -180,6 +190,8 @@ class ClientEventAttending(generics.ListAPIView):
         user = self.request.user
         return Event.objects.filter(event_attendees=user)
 
+
+# signing up to attend an event and cancel your signup
 
 class EventRosterUpdateViewSet(generics.UpdateAPIView):
     queryset = Event.objects.all()
@@ -201,6 +213,8 @@ class EventRosterUpdateViewSet(generics.UpdateAPIView):
             return Response({"detail": "You have been added to the attendees list."}, status=status.HTTP_200_OK)
 
 
+# Create organization and see list of all organizations
+
 class OrganizationProfileViewSet(generics.ListCreateAPIView):
     queryset = OrganizationProfile.objects.all()
     serializer_class = OrganizationProfileSerializer
@@ -209,6 +223,8 @@ class OrganizationProfileViewSet(generics.ListCreateAPIView):
         permissions.IsAuthenticatedOrReadOnly, IsManagerOrReadOnlyCreateOrganiz]
 
 
+# Edit organization profile details
+
 class EditOrganizationProfileViewSet(generics.RetrieveUpdateDestroyAPIView):
     queryset = OrganizationProfile.objects.all()
     serializer_class = OrganizationProfileSerializer
@@ -216,6 +232,8 @@ class EditOrganizationProfileViewSet(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly, IsManagerOrReadOnlyEditOrganiz]
 
+
+# create membership between a member and their organization
 
 class OrganizationMembershipViewSet(generics.CreateAPIView):
     queryset = OrganizationMembership.objects.all()
@@ -227,6 +245,8 @@ class OrganizationMembershipViewSet(generics.CreateAPIView):
         serializer.save()
 
 
+# create event type
+
 class EventTypeViewSet(generics.CreateAPIView):
     queryset = EventType.objects.all()
     serializer_class = EventTypeSerializers
@@ -234,17 +254,23 @@ class EventTypeViewSet(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
+# upload a file
+
 class UploadCreateView(generics.CreateAPIView):
     queryset = FileUpload.objects.all()
     serializer_class = FileUploadSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
+# upload an image
+
 class ImageCreateView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = ImageUploadSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
+# upload avatar image for users and organiz
 
 class FileViewSet(generics.ListCreateAPIView):
     queryset = FileUpload.objects.all()
@@ -254,6 +280,8 @@ class FileViewSet(generics.ListCreateAPIView):
     def get_queryset(self):
         return self.queryset.filter(client_profile=self.request.user)
 
+
+# list all organizations a client is a member of
 
 class MembershipView(generics.ListAPIView):
     queryset = OrganizationMembership.objects.all()
@@ -269,12 +297,15 @@ class MembershipView(generics.ListAPIView):
         return self.queryset.filter(member=self.request.user)
 
 
+# manager gets list of clients associated with their organization
+
 class ClientListView(generics.ListAPIView):
     queryset = OrganizationMembership.objects.all()
     serializer_class = MembershipSerializer
 
     permission_classes = [permissions.IsAuthenticated, IsManagerOnlyClientList]
 
+    # add permission to allow manager to see only clients list for their organiz
     def get_queryset(self):
         org_id = self.kwargs['organization_id']
         user_in_organiz = OrganizationMembership.objects.filter(
@@ -285,11 +316,15 @@ class ClientListView(generics.ListAPIView):
             return OrganizationMembership.objects.filter(organization__id=org_id)
 
 
+# admin can view and edit  role for users
+
 class UserRoleView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+
+# uploading avatar to users.
 
 class UploadUserAvatarView(generics.UpdateAPIView):
     queryset = User.objects.all()
