@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile
-from .models import OrganizationMembership, ClientLanguageMembership, ManagerOrgMembership
-from .models import OrgLanguageMembership, EventType, FileUpload, User
+from .models import Event, EventRoster, OrganizationProfile
+from .models import OrganizationMembership
+from .models import EventType, FileUpload, User
 from djoser.serializers import UserSerializer, UserCreateSerializer
 from PIL import Image
 from io import BytesIO
@@ -105,20 +105,6 @@ class EventRosterSignupSerializer(serializers.ModelSerializer):
         fields = ['event_id']
 
 
-class LangSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Lang
-        fields = '__all__'
-
-
-class ClientProfileSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ClientProfile
-        fields = '__all__'
-
-
 class OrganizationProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -130,26 +116,6 @@ class OrganizationMembershipSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrganizationMembership
-        fields = '__all__'
-
-# class ManagerMembershipSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = ManagerOrgMembership
-#         fields = '__all__'
-
-
-class ClientLanguageMembershipSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ClientLanguageMembership
-        fields = '__all__'
-
-
-class OrgLanguageMembershipSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = OrgLanguageMembership
         fields = '__all__'
 
 

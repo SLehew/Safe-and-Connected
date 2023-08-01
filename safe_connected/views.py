@@ -3,13 +3,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import EventSerializer, EventRosterSerializer, LangSerializer
-from .serializers import ClientProfileSerializer, OrganizationProfileSerializer, MembershipSerializer
-from .serializers import OrganizationMembershipSerializer, ClientLanguageMembershipSerializer, OrgListEventSerializer
-from .serializers import OrgLanguageMembershipSerializer, EventTypeSerializers, FileUploadSerializer
-from .serializers import UserRegistrationSerializer, EventRosterSignupSerializer, EventRosterNameSerializer, ImageUploadSerializer
-from .models import Event, EventRoster, Lang, ClientProfile, OrganizationProfile, OrganizationMembership
-from .models import ClientLanguageMembership, OrgLanguageMembership, EventType, FileUpload, User
+from .serializers import EventSerializer, EventRosterSerializer
+from .serializers import  OrganizationProfileSerializer, MembershipSerializer
+from .serializers import OrganizationMembershipSerializer, OrgListEventSerializer
+from .serializers import EventTypeSerializers, FileUploadSerializer
+from .serializers import UserRegistrationSerializer, EventRosterNameSerializer, ImageUploadSerializer
+from .models import Event, OrganizationProfile, OrganizationMembership
+from .models import EventType, FileUpload, User
 from safe_connected.permissions import IsManagerOrReadOnly, IsManagerOrReadOnlyEventDetails
 from safe_connected.permissions import IsManagerOrReadOnlyCreateOrganiz, IsManagerOrReadOnlyEditOrganiz, IsManagerOnlyClientList
 from django.utils.timezone import now
@@ -86,7 +86,7 @@ class EventHomeClientViewSet(generics.ListAPIView):
 
         today = now().date()
 
-        queryset = Event.objects.filter(event_date__gte=today).filter(event_published=True) | Event.objects.filter(
+        queryset = Event.objects.filter(event_date__gte=today) | Event.objects.filter(
             event_date__isnull=True)
         queryset = queryset.order_by('event_date')
 
@@ -108,7 +108,6 @@ class EventListViewSet(generics.ListCreateAPIView):
     ]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    # we need to work on this. it's filtering based on who created event
     def get_queryset(self):
         return self.queryset.filter(event_organizer=self.request.user)
 
@@ -165,27 +164,6 @@ class EventSearchViewSet(APIView):
         return Response(serializer.data)
 
 
-class EventRosterCreateViewSet(generics.UpdateAPIView):
-    queryset = EventRoster.objects.all()
-    serializer_class = EventRosterSignupSerializer
-
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save(attendee=self.request.user)
-        serializer.instance.email_event_signup()
-
-
-class EventRosterListViewSet(generics.ListAPIView):
-    queryset = EventRoster.objects.all()
-    serializer_class = EventRosterSerializer
-
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-
 class EventRosterViewSet(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventRosterNameSerializer
@@ -223,36 +201,6 @@ class EventRosterUpdateViewSet(generics.UpdateAPIView):
             return Response({"detail": "You have been added to the attendees list."}, status=status.HTTP_200_OK)
 
 
-class LanguageViewSet(generics.CreateAPIView):
-    queryset = Lang.objects.all()
-    serializer_class = LangSerializer
-
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-
-class ClientProfileViewSet(generics.CreateAPIView):
-    queryset = ClientProfile.objects.all()
-    serializer_class = ClientProfileSerializer
-
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(client=self.request.user)
-
-
-class ClientProfileDetailViewSet(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ClientProfile.objects.all()
-    serializer_class = ClientProfileSerializer
-
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(client=self.request.user)
-
-
 class OrganizationProfileViewSet(generics.ListCreateAPIView):
     queryset = OrganizationProfile.objects.all()
     serializer_class = OrganizationProfileSerializer
@@ -277,23 +225,6 @@ class OrganizationMembershipViewSet(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save()
-
-
-class ClientLanguageMembershipViewSet(generics.CreateAPIView):
-    queryset = ClientLanguageMembership.objects.all()
-    serializer_class = ClientLanguageMembershipSerializer
-
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-
-class OrgLanguageMembershipViewSet(generics.CreateAPIView):
-    queryset = OrgLanguageMembership.objects.all()
-    serializer_class = OrgLanguageMembershipSerializer
-
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class EventTypeViewSet(generics.CreateAPIView):
